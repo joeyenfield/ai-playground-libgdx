@@ -15,6 +15,8 @@ public class DesktopLauncher {
 		settings.combineSubdirectories = true;
 		TexturePacker.process(settings, "artwork/HD", "android/assets/art", "game");
 
+		LwjglApplicationConfiguration.disableAudio = true;
+
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		config.width = 800;
 		config.height = 600;
