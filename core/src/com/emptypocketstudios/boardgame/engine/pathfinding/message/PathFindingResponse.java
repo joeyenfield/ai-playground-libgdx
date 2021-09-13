@@ -1,10 +1,9 @@
 package com.emptypocketstudios.boardgame.engine.pathfinding.message;
 
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import com.emptypocketstudios.boardgame.engine.messages.Message;
-import com.emptypocketstudios.boardgame.engine.pathfinding.layers.PathFindingResultEnum;
+import com.emptypocketstudios.boardgame.engine.pathfinding.PathFindingResultEnum;
 import com.emptypocketstudios.boardgame.engine.world.Cell;
 
 public class PathFindingResponse extends Message implements Pool.Poolable {

@@ -1,4 +1,4 @@
-package com.emptypocketstudios.boardgame.engine.pathfinding.layers;
+package com.emptypocketstudios.boardgame.engine.pathfinding;
 
 public enum PathFindingResultEnum {
     NOT_FOUND,

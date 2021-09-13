@@ -50,8 +50,9 @@ public class Engine implements MessageProcessor {
 
     public void update(float delta) {
         world.update(delta);
-        engineControllerManager.updateLogic(delta);
-
+        if(engineControllerManager != null) {
+            engineControllerManager.updateLogic(delta);
+        }
         postOffice.process((1000/60)/2);
         pathFinderManager.process(1000/60);
     }

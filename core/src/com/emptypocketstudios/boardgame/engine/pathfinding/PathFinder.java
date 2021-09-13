@@ -4,16 +4,15 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pools;
 import com.emptypocketstudios.boardgame.engine.Engine;
 import com.emptypocketstudios.boardgame.engine.entity.Entity;
-import com.emptypocketstudios.boardgame.engine.pathfinding.layers.PathFindingResultEnum;
 import com.emptypocketstudios.boardgame.engine.pathfinding.layers.RegionLimitedCellPathFinder;
 import com.emptypocketstudios.boardgame.engine.pathfinding.layers.RegionNodePathFinder;
+import com.emptypocketstudios.boardgame.engine.pathfinding.layers.RegionNodePathFinderNG;
 import com.emptypocketstudios.boardgame.engine.pathfinding.message.PathFindingRequest;
 import com.emptypocketstudios.boardgame.engine.pathfinding.message.PathFindingResponse;
 import com.emptypocketstudios.boardgame.engine.world.Cell;
 import com.emptypocketstudios.boardgame.engine.world.RegionNode;
 
 public class PathFinder {
-
     Engine engine;
     public RegionLimitedCellPathFinder graphFinder = new RegionLimitedCellPathFinder();
     public RegionNodePathFinder layerFinder = new RegionNodePathFinder();
@@ -41,9 +40,8 @@ public class PathFinder {
             if (start != end) {
                 //Perform Region Search
                 regions.clear();
-                layerFinder = new RegionNodePathFinder();
+//                layerFinder = new RegionNodePathFinder();
                 response.regionSearchResult = layerFinder.search(engine.world, start, end, regions, maxTime, request.diagonal);
-
                 //Perform Cell Search
                 if (response.regionSearchResult == PathFindingResultEnum.SUCCESS) {
                     graphFinder.distCheckFast = request.distCheckFast;

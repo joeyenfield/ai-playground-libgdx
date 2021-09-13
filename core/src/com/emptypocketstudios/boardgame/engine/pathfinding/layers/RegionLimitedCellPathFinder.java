@@ -1,10 +1,10 @@
 package com.emptypocketstudios.boardgame.engine.pathfinding.layers;
 
 import com.badlogic.gdx.ai.msg.PriorityQueue;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pools;
+import com.emptypocketstudios.boardgame.engine.pathfinding.PathFindingResultEnum;
 import com.emptypocketstudios.boardgame.engine.pathfinding.cells.CellLink;
 import com.emptypocketstudios.boardgame.engine.world.Cell;
 import com.emptypocketstudios.boardgame.engine.world.CellTypes;
@@ -34,7 +34,7 @@ public class RegionLimitedCellPathFinder {
     Array<Cell> linkCells = new Array<>();
 
     public PathFindingResultEnum findLink(Cell origin, Cell target, Array<RegionNode> allowedNodes,
-                            Array<Cell> path, long leftTime, boolean diagonal) {
+                                          Array<Cell> path, long leftTime, boolean diagonal) {
         long start = System.currentTimeMillis();
         // If debug cleanup at start
         if (debug) {
@@ -128,6 +128,11 @@ public class RegionLimitedCellPathFinder {
         return pathFound;
     }
 
+    public float getDistance(Vector2 p1, Vector2 p2) {
+        return p1.dst(p2);
+    }
+
+
     public float getDeltaDistance(Vector2 p1, Vector2 p2) {
         return Math.abs(p2.x - p1.x) + Math.abs(p2.y - p1.y);
     }
@@ -143,7 +148,8 @@ public class RegionLimitedCellPathFinder {
                 + CellTypes.getTravelEffort(childCell.type);
 
         travelWeight = getDeltaDistance(childCell.pos, parentCell.pos) * travelWeight;
-        travelWeight/=2;
+
+        //Decreate travelWeight
         float destWeight = 0;
         if (distCheckFast) {
             destWeight = getCheboskyDistance(targetCell.pos, childCell.pos);
@@ -154,7 +160,7 @@ public class RegionLimitedCellPathFinder {
 
         path.link(parent, parentCell, childCell,
                 parent.travelWeight + travelWeight,
-                destWeight / 5);
+                destWeight);
         return path;
     }
 

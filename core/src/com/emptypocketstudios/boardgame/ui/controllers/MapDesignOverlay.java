@@ -106,7 +106,7 @@ public class MapDesignOverlay extends EngineController {
             if (enabled) {
                 c.type = this.currentCellType;
                 c.lastChangeTime = System.currentTimeMillis();
-                engine.world.getChunkByWorldPosition(pos).updateLayers = true;
+                engine.world.getChunkByWorldPosition(pos).updateRegionsRequired = true;
             }
             return true;
         }

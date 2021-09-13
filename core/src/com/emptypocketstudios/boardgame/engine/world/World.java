@@ -227,14 +227,44 @@ public class World {
     }
 
     public void update(float delta) {
+        // Update each cell
+        boolean regionUpdatedRequired = false;
+        boolean regionLinkUpdatedRequired = false;
         for (int x = 0; x < chunksX; x++) {
             for (int y = 0; y < chunksY; y++) {
                 WorldChunk chunk = chunks[x][y];
                 if (chunk != null) {
                     chunk.update(delta);
+                    regionUpdatedRequired = regionUpdatedRequired || chunk.updateRegionsRequired;
                 }
             }
         }
+        //Perform any layer updates
+        if (regionUpdatedRequired) {
+            for (int x = 0; x < chunksX; x++) {
+                for (int y = 0; y < chunksY; y++) {
+                    WorldChunk chunk = chunks[x][y];
+                    if (chunk != null) {
+                        chunk.updateRegions();
+                        //Update Linked Nodes that regions need update
+                        regionLinkUpdatedRequired = regionLinkUpdatedRequired || chunk.updateRegionLinksRequired;
+                    }
+                }
+            }
+        }
+
+        if (regionLinkUpdatedRequired) {
+            for (int x = 0; x < chunksX; x++) {
+                for (int y = 0; y < chunksY; y++) {
+                    WorldChunk chunk = chunks[x][y];
+                    if (chunk != null) {
+                        chunk.updateRegionLinks();
+                    }
+                }
+            }
+        }
+
+
     }
 
     public Entity getEntityByName(String entityName) {
@@ -256,5 +286,16 @@ public class World {
             }
         }
         return bestEntity;
+    }
+
+    public void fillAllCells(short type) {
+        for (int x = 0; x < chunksX; x++) {
+            for (int y = 0; y < chunksY; y++) {
+                WorldChunk chunk = chunks[x][y];
+                if (chunk != null) {
+                    chunk.fillAllCells(type);
+                }
+            }
+        }
     }
 }

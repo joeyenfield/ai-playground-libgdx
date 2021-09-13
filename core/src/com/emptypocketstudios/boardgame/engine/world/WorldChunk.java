@@ -6,12 +6,9 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
 import com.emptypocketstudios.boardgame.engine.entity.Entity;
-import com.emptypocketstudios.boardgame.engine.pathfinding.layers.RegionLinks;
+import com.emptypocketstudios.boardgame.engine.world.processors.WorldChunkRegionLinkProcessor;
 import com.emptypocketstudios.boardgame.engine.world.processors.WorldChunkRegionProcessor;
-import com.emptypocketstudios.boardgame.engine.world.processors.CellLinkChunkProcessor;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.emptypocketstudios.boardgame.engine.world.processors.WorldChunkCellLinkProcessor;
 
 public class WorldChunk implements Pool.Poolable {
     public World world;
@@ -24,15 +21,20 @@ public class WorldChunk implements Pool.Poolable {
 
     public Array<Entity> entities = new Array<>();
 
-    public boolean updateLayers = true;
-    public WorldChunkRegionProcessor worldChunkRegionProcessor;
-    public CellLinkChunkProcessor cellLinkChunkProcessor;
-    Array<RegionLinks> north = new Array<>();
+    public boolean updateRegionsRequired = true;
+    public boolean updateRegionLinksRequired = true;
 
+    public WorldChunkRegionProcessor worldChunkRegionProcessor;
+    public WorldChunkRegionLinkProcessor worldChunkRegionLinkProcessor;
+    public WorldChunkCellLinkProcessor worldChunkCellLinkProcessor;
+
+    public Array<WorldChunkRegionNodeLink> regionNodeLinks = new Array<>();
+    public Array<WorldChunkRegionNodeLink> regionNodeDiagonalLinks = new Array<>();
 
     public WorldChunk() {
-        this.cellLinkChunkProcessor = new CellLinkChunkProcessor(this);
+        this.worldChunkCellLinkProcessor = new WorldChunkCellLinkProcessor(this);
         this.worldChunkRegionProcessor = new WorldChunkRegionProcessor(this);
+        this.worldChunkRegionLinkProcessor = new WorldChunkRegionLinkProcessor(this);
     }
 
     public void init(World world, Rectangle region, int chunkX, int chunkY, int numCellsX, int numCellsY) {
@@ -68,6 +70,9 @@ public class WorldChunk implements Pool.Poolable {
             }
         }
 
+        updateRegionsRequired = true;
+        updateRegionLinksRequired = true;
+
         Pools.free(subRegion);
         Pools.free(cellId);
     }
@@ -90,7 +95,7 @@ public class WorldChunk implements Pool.Poolable {
     }
 
     public void setupInternalLinks() {
-        this.cellLinkChunkProcessor.process();
+        this.worldChunkCellLinkProcessor.process();
     }
 
     @Override
@@ -105,16 +110,22 @@ public class WorldChunk implements Pool.Poolable {
         }
     }
 
-    public void updateLayers() {
-        this.worldChunkRegionProcessor.process();
+    public void updateRegions() {
+        if (updateRegionsRequired) {
+            this.worldChunkRegionProcessor.process();
+            this.updateRegionLinksRequired = true;
+            this.updateRegionsRequired = false;
+        }
+    }
+
+    public void updateRegionLinks() {
+        if (updateRegionLinksRequired) {
+            this.worldChunkRegionLinkProcessor.process();
+            this.updateRegionLinksRequired = false;
+        }
     }
 
     public void update(float delta) {
-        if (updateLayers) {
-            updateLayers();
-            updateLayers = false;
-        }
-
         for (int i = 0; i < entities.size; i++) {
             Entity e = entities.get(i);
             e.update(delta);
@@ -132,6 +143,7 @@ public class WorldChunk implements Pool.Poolable {
         }
     }
 
+
     public void addEntity(Entity e) {
         entities.add(e);
     }
@@ -141,4 +153,13 @@ public class WorldChunk implements Pool.Poolable {
     }
 
 
+    public void fillAllCells(short type) {
+        for (int x = 0; x < numCellsX; x++) {
+            for (int y = 0; y < numCellsY; y++) {
+                Cell c = cells[x][y];
+                cells[x][y].type = type;
+                updateRegionsRequired = true;
+            }
+        }
+    }
 }

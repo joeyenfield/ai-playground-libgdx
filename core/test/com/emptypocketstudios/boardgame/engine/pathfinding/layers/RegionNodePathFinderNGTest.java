@@ -2,6 +2,7 @@ package com.emptypocketstudios.boardgame.engine.pathfinding.layers;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
+import com.emptypocketstudios.boardgame.engine.pathfinding.PathFindingResultEnum;
 import com.emptypocketstudios.boardgame.engine.world.Cell;
 import com.emptypocketstudios.boardgame.engine.world.CellTypes;
 import com.emptypocketstudios.boardgame.engine.world.RegionNode;
@@ -12,17 +13,17 @@ import junit.framework.TestCase;
 
 import org.junit.Test;
 
-public class LayerPathFinderTest extends TestCase {
-
+public class RegionNodePathFinderNGTest extends TestCase {
     World world;
-    RegionNodePathFinder pathFinder;
+    RegionNodePathFinderNG pathFinder;
 
     public void setUp() throws Exception {
         super.setUp();
-        pathFinder = new RegionNodePathFinder();
+        pathFinder = new RegionNodePathFinderNG();
         Rectangle region = new Rectangle(0, 0, 100, 100);
         world = new World(region, 10, 10, 10, 10);
         world.loadAllChunks();
+//        world.fillAllCells(CellTypes.GRASS);
         world.update(1);
     }
 
@@ -31,7 +32,7 @@ public class LayerPathFinderTest extends TestCase {
         Array<RegionNode> path = new Array<>();
         Cell start = world.getCellByCellId(1, 1);
         Cell end = world.getCellByCellId(5, 5);
-        pathFinder.search(world, start, end, path, false);
+        pathFinder.search(world, start, end, path, 9999,false);
         assertEquals(1, path.size);
         assertEquals(0, path.get(0).chunkId.x);
         assertEquals(0, path.get(0).chunkId.y);
@@ -52,8 +53,8 @@ public class LayerPathFinderTest extends TestCase {
         assertEquals(0, end.region.chunkId.y);
 
 
-        pathFinder.search(world, start, end, path, false);
-
+        PathFindingResultEnum result = pathFinder.search(world, start, end, path, 99999,false);
+        assertEquals(PathFindingResultEnum.SUCCESS,result);
         RegionNode startRegion = new RegionNode();
         startRegion.set(0, 0, 1);
         RegionNode targetRegion = new RegionNode();
@@ -79,7 +80,7 @@ public class LayerPathFinderTest extends TestCase {
         assertEquals(9, end.region.chunkId.y);
 
 
-        pathFinder.search(world, start, end, path, false);
+        pathFinder.search(world, start, end, path, 9999,false);
 
         RegionNode startRegion = new RegionNode();
         startRegion.set(1, 9, 1);
@@ -111,9 +112,9 @@ public class LayerPathFinderTest extends TestCase {
         for (int y = 0; y < chunk.numCellsY; y++) {
             chunk.cells[0][y].type = CellTypes.ROCK;
         }
-        chunk.updateLayers();
+        chunk.updateRegions();
 
-        pathFinder.search(world, start, end, path, false);
+        pathFinder.search(world, start, end, path, 9999,false);
 
         RegionNode startRegion = new RegionNode();
         startRegion.set(0, 0, 1);
@@ -125,50 +126,13 @@ public class LayerPathFinderTest extends TestCase {
         assertTrue(path.contains(targetRegion, false));
     }
 
-    public void testAddRegionLinkDoesNothingIfCellsEmpty() {
-        Array<RegionLinks> regions = new Array<>();
-        pathFinder.addRegionLink(null, null, regions);
-        assertEquals(0, regions.size);
-    }
-
-    public void testAddRegionLinkAddsNewLinkIfIdDoesNotAlreadyExist() {
-        Array<RegionLinks> regions = new Array<>();
-        Cell c1 = new Cell();
-        Cell c2 = new Cell();
-        c1.region.regionId = 1;
-        c1.cellId.x = 0;
-        c1.cellId.y = 0;
-        c2.region.regionId = 1;
-        c2.cellId.x = 1;
-        c2.cellId.y = 0;
-        pathFinder.addRegionLink(c1, c1, regions);
-        assertEquals(1, regions.size);
-
-        //If same cell tested dont add it
-        Cell c3 = new Cell();
-        Cell c4 = new Cell();
-        c3.region.regionId = 1;
-        c3.cellId.x = 0;
-        c3.cellId.y = 0;
-        c4.region.regionId = 1;
-        c4.cellId.x = 1;
-        c4.cellId.y = 0;
-
-        pathFinder.addRegionLink(c3, c4, regions);
-        assertEquals(1, regions.size);
-    }
-
     @Test
     public void testGetLinksEdgeWhenSameRegion() {
         WorldChunk chunk = world.getChunkByChunkId(0, 0);
         assertNotNull(chunk);
 
-        RegionLinks current = new RegionLinks();
-        current.current = new RegionNode();
-        current.current.set(0, 0, 1);
-
-        Array<RegionLinks> links = new Array<>();
-        pathFinder.getLinks(chunk, current, links);
+        Array<RegionLinksNG> links = new Array<>();
+        pathFinder.getLinks(chunk, world.getCellByCellId(0,0).region, links);
         assertEquals(2, links.size);
 
         RegionLinks linkUp = new RegionLinks();
@@ -187,8 +151,9 @@ public class LayerPathFinderTest extends TestCase {
         linkRight.current.regionId = 1;
         linkRight.current.chunkId.set(1, 0);
 
-        assertTrue(links.contains(linkUp, false));
-        assertTrue(links.contains(linkRight, false));
+        fail();
+//        assertTrue(links.contains(linkUp, false));
+//        assertTrue(links.contains(linkRight, false));
     }
 
     @Test
@@ -200,45 +165,25 @@ public class LayerPathFinderTest extends TestCase {
         current.current = new RegionNode();
         current.current.set(0, 0, 10);
 
-        Array<RegionLinks> links = new Array<>();
-        pathFinder.getLinks(chunk, current, links);
-        assertEquals(1, links.size);
+        fail();
+//        Array<RegionLinks> links = new Array<>();
+//        pathFinder.getLinks(chunk, current, links);
+//        assertEquals(1, links.size);
     }
 
     @Test
     public void testGetLinks() {
         Array<RegionNode> path = new Array<>();
         Cell start = world.getCellByCellId(15, 85);
+        WorldChunk chunk = world.getChunkByChunkId(start.region.chunkId);
         //Verfity selected cells in the right chunks
         assertEquals(1, start.region.chunkId.x);
         assertEquals(8, start.region.chunkId.y);
+        assertEquals(4,chunk.regionNodeLinks.size);
 
-        RegionLinks regionLink = new RegionLinks();
-        regionLink.current = new RegionNode();
-        regionLink.current.set(start);
-
-        Array<RegionLinks> links = new Array<>();
-        pathFinder.getLinks(world.getChunkByChunkId(start.region.chunkId), regionLink, links);
+        Array<RegionLinksNG> links = new Array<>();
+        pathFinder.getLinks(world.getChunkByChunkId(start.region.chunkId), start.region, links);
         assertEquals(4, links.size);
-
-        RegionLinks tester = new RegionLinks();
-        tester.source = new RegionNode();
-        tester.current = new RegionNode();
-
-        tester.source.set(start);
-
-        tester.current.set(0, 8, 1);
-        assertTrue(links.contains(tester, false));
-
-        tester.current.set(2, 8, 1);
-        assertTrue(links.contains(tester, false));
-
-        tester.current.set(1, 9, 1);
-        assertTrue(links.contains(tester, false));
-
-        tester.current.set(1, 7, 1);
-        assertTrue(links.contains(tester, false));
-
     }
 
     @Test

@@ -7,13 +7,10 @@ import com.emptypocketstudios.boardgame.engine.entity.Entity;
 import com.emptypocketstudios.boardgame.engine.entity.components.PathFollowComponent;
 import com.emptypocketstudios.boardgame.engine.messages.Message;
 import com.emptypocketstudios.boardgame.engine.messages.MessageProcessor;
-import com.emptypocketstudios.boardgame.engine.pathfinding.layers.PathFindingResultEnum;
 import com.emptypocketstudios.boardgame.engine.pathfinding.message.PathFindingRequest;
 import com.emptypocketstudios.boardgame.engine.pathfinding.message.PathFindingResponse;
 
 import java.util.PriorityQueue;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 public class PathFinderManager implements MessageProcessor<Message> {
     public static final String MESSAGE_TARGET_NAME = "PATHFINDER";

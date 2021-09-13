@@ -3,9 +3,9 @@ package com.emptypocketstudios.boardgame.engine.world.processors;
 import com.emptypocketstudios.boardgame.engine.world.Cell;
 import com.emptypocketstudios.boardgame.engine.world.WorldChunk;
 
-public class CellLinkChunkProcessor extends WorldChunkProcessor {
+public class WorldChunkCellLinkProcessor extends WorldChunkProcessor {
 
-    public CellLinkChunkProcessor(WorldChunk chunk) {
+    public WorldChunkCellLinkProcessor(WorldChunk chunk) {
         super(chunk);
     }
 

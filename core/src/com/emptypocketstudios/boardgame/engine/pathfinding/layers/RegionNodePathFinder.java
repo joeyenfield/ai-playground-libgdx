@@ -3,6 +3,7 @@ package com.emptypocketstudios.boardgame.engine.pathfinding.layers;
 import com.badlogic.gdx.ai.msg.PriorityQueue;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pools;
+import com.emptypocketstudios.boardgame.engine.pathfinding.PathFindingResultEnum;
 import com.emptypocketstudios.boardgame.engine.world.Cell;
 import com.emptypocketstudios.boardgame.engine.world.RegionNode;
 import com.emptypocketstudios.boardgame.engine.world.World;
@@ -13,7 +14,6 @@ import java.util.HashMap;
 
 public class RegionNodePathFinder {
     long start = 0;
-    long lastTime = 0;
     long limit = 30;
     Array<RegionLinks> createdRegionLinks = new Array<RegionLinks>();
     PriorityQueue<RegionLinks> openRegions = new PriorityQueue<>();
@@ -47,7 +47,6 @@ public class RegionNodePathFinder {
 
         bestPath.clear();
         openRegions.clear();
-        lastTime = System.currentTimeMillis() - start;
         return result;
     }
 

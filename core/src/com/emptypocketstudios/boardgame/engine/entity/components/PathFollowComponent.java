@@ -6,7 +6,7 @@ import com.badlogic.gdx.utils.Pools;
 import com.emptypocketstudios.boardgame.engine.entity.Entity;
 import com.emptypocketstudios.boardgame.engine.entity.NotificationTypes;
 import com.emptypocketstudios.boardgame.engine.pathfinding.PathFinder;
-import com.emptypocketstudios.boardgame.engine.pathfinding.layers.PathFindingResultEnum;
+import com.emptypocketstudios.boardgame.engine.pathfinding.PathFindingResultEnum;
 import com.emptypocketstudios.boardgame.engine.pathfinding.message.PathFindingRequest;
 import com.emptypocketstudios.boardgame.engine.pathfinding.message.PathFindingResponse;
 import com.emptypocketstudios.boardgame.engine.world.Cell;

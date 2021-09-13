@@ -51,6 +51,5 @@ public class RegionLinks implements Comparable<RegionLinks>, Disposable {
         source = null;
         current = null;
         parent = null;
-        weight = 1;
     }
 }
