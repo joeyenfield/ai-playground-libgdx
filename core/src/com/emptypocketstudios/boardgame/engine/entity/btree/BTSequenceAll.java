@@ -2,9 +2,9 @@ package com.emptypocketstudios.boardgame.engine.entity.btree;
 
 import com.emptypocketstudios.boardgame.engine.entity.Entity;
 
-public class BTSequenceAny extends BTSequence {
+public class BTSequenceAll extends BTSequence {
 
-    public BTSequenceAny(BTItem parent) {
+    public BTSequenceAll(BTItem parent) {
         super(parent);
     }
 
@@ -13,21 +13,22 @@ public class BTSequenceAny extends BTSequence {
         for (int i = 0; i < items.size; i++) {
             BTResult result = items.get(i).process();
             switch (result) {
-                case SUCCESS:
+                case FAILURE:
                 case RUNNING:
                     return result;
             }
         }
-        return BTResult.FAILURE;
+        return BTResult.SUCCESS;
     }
 
     @Override
     public String commandName() {
-        return "ANY";
+        return null;
     }
 
     @Override
     public void setup(String command) {
+
     }
 
     @Override

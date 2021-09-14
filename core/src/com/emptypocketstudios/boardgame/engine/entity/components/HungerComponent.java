@@ -3,7 +3,7 @@ package com.emptypocketstudios.boardgame.engine.entity.components;
 import com.emptypocketstudios.boardgame.engine.entity.Entity;
 
 public class HungerComponent extends EntityComponent {
-    float food = 100;
+    public float hunger = 0;
 
     float eatRate = 10;
     public HungerComponent(Entity entity) {
@@ -12,6 +12,6 @@ public class HungerComponent extends EntityComponent {
 
     @Override
     public void update(float delta) {
-        food-=eatRate*delta;
+        hunger+=eatRate*delta;
     }
 }

@@ -4,9 +4,15 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
 
+import java.util.HashMap;
+
 public abstract class BTSequence extends BTItem {
 
     Array<BTItem> items = new Array<>();
+
+    public BTSequence(BTItem parent) {
+        super(parent);
+    }
 
     public void add(BTItem subItem) {
         items.add(subItem);
@@ -15,8 +21,6 @@ public abstract class BTSequence extends BTItem {
     public void remove(BTItem subItem) {
         items.removeIndex(items.indexOf(subItem, true));
     }
-
-    public abstract BTResult process();
 
     @Override
     public void reset() {
