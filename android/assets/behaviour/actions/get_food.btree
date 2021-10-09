@@ -1,0 +1,25 @@
+BTREE name:get_food
+  ALL name:Get food
+    LOG name:Get food, message:"I want to get some food"
+
+    ANY name:Search BERRY_BUSH
+      CELL_SEARCH name:Search BERRY_BUSH, range:50, searchType:NEAR_SPIRAL, type:BERRY_BUSH, memory:BERRY_BUSH_TARGET
+      LOG name:Search BERRY_BUSH, message:"I cant find any BERRY_BUSH", forcedResult:FAILURE
+    LOG name:Search BERRY_BUSH, message:"I see a BERRY_BUSH, planing path!"
+
+    ANY name:Planning Path
+      PLAN_PATH name:Planning Path, memoryTargetPos:BERRY_BUSH_TARGET, memory:PATH_TO_BERRY_BUSH, debug:true
+      LOG name:Planning Path, message:"I cant see any path to the BERRY_BUSH", forcedResult:FAILURE
+    LOG name:Planning Path, message:"Im going to walk to the BERRY_BUSH"
+    BRAIN_FORGET name:Forget path, memory:BERRY_BUSH_TARGET
+
+    ANY name:Walk to BERRY_BUSH
+      FOLLOW_PATH name:Walk to BERRY_BUSH, memoryPathName:PATH_TO_BERRY_BUSH
+      LOG name:Walk to BERRY_BUSH Failed, message:"I lost my way to the BERRY_BUSH.", response:FAILURE
+    LOG name:Walk to BERRY_BUSH, message:"I made it to the BERRY_BUSH"
+    BRAIN_FORGET name:Forget path, memory:PATH_TO_BERRY_BUSH
+
+    ANY name:Eat Food
+      EAT name:Cut Down BERRY_BUSH, restore:100
+      LOG name:Walk to BERRY_BUSH Failed, message:"I lost my way to the BERRY_BUSH.", response:FAILURE
+    LOG name:Get food, message:"Success"

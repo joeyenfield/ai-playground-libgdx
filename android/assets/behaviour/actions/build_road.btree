@@ -1,0 +1,46 @@
+BTREE name:build_road
+
+  ALL name: Build Road
+    LOG name:Figure Path, message:"I'm going to build a road"
+
+    ALL name:Wandering
+        LOG name:Figure Path, message:"I'm going to wander somewhere"
+        BTREE name:Wandering, ref:actions/wander
+
+    ANY name:Search House
+        ENTITY_SEARCH name:Search House, range:5000, searchType:NEAREST, tag:EMPTY_HOUSE, memory:MY_HOUSE_NAME
+        LOG name:Search House, message:"I cant find any House", forcedResult:FAILURE
+    LOG name:Search House, message:"I found House, planning path!"
+
+    ENTITY_EXTRACT name:Search House, memoryEntityName:MY_HOUSE_NAME, field:POS, memory:MY_HOSUSE_POS
+
+    ANY name:Plan Path
+        PLAN_PATH name:Plan Path, memoryTargetPos:MY_HOSUSE_POS, memory:PATH_TO_HOUSE
+        LOG name:Plan Path, message:"I cant find a path to the house",forcedResult:FAILURE
+    LOG name:Plan Path, message:"I found a path, off I go!"
+
+
+    BRAIN_PICK_DATA name:Extract Path Size, sourceMemory:PATH_TO_HOUSE,sourceType:EXTRACT_PATH,memory:PATH_ELEMENT_ARRAY
+    BRAIN_PICK_DATA name:Extract Path Size, sourceMemory:PATH_ELEMENT_ARRAY,sourceType:ARRAY_SIZE,memory:PATH_ELEMENT_ARRAY_SIZE
+# TODO : Review how to verify the cell has not changed since the search
+    LOOP name:Path Loop, startIndex:0, memoryEndIndex:PATH_ELEMENT_ARRAY_SIZE,memory:PATH_INDEX
+        ALL name:Loop elements
+            BRAIN_PICK_DATA name:Extract Path Size, sourceMemory:PATH_ELEMENT_ARRAY,sourceType:ARRAY_ELEMENT,sourceData:PATH_INDEX, memory:CURRENT_PATH_ELEMENT
+            BRAIN_PICK_DATA name:Extract Path Size, sourceMemory:CURRENT_PATH_ELEMENT,sourceType:CELL_POS,memory:NEXT_CELL_POS
+            
+            ANY name:Planning Path
+                PLAN_PATH name:Planning Path, memoryTargetPos:NEXT_CELL_POS, memory:PATH_TO_GRASS, debug:true
+                LOG name:Planning Path, message:"I cant see any path to the grass", forcedResult:FAILURE
+            LOG name:Planning Path, message:"Im going to walk to the grass"
+            BRAIN_FORGET name:Forget path, memory:GRASS_TARGET
+            
+            ANY name:Walk Path
+                FOLLOW_PATH name:Walk Path, memoryPathName:PATH_TO_GRASS
+                LOG name:Walk Path, message:"I lost my way to the grass.", response:FAILURE
+            LOG name:Walk Path, message:"I followed the path to the grass."
+            BRAIN_FORGET name:Forget path, memory:PATH_TO_GRASS
+
+            ANY name:Plant Forest
+                BUILD_ROAD name:Plant Forest, delay:10
+                LOG name:Plant Forest, message:"I failed to plant the forest.", response:FAILURE
+            LOG name:Plant Forest, message:"I planted the forest."
