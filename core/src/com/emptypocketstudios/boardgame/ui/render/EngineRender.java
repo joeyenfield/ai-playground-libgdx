@@ -1,6 +1,5 @@
 package com.emptypocketstudios.boardgame.ui.render;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -9,23 +8,13 @@ import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Pools;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.emptypocketstudios.boardgame.engine.Engine;
-import com.emptypocketstudios.boardgame.engine.entity.EntityType;
-import com.emptypocketstudios.boardgame.engine.entity.NotificationTypes;
-import com.emptypocketstudios.boardgame.engine.entity.components.PathFollowComponent;
+import com.emptypocketstudios.boardgame.engine.entity.EntityTextureAtlas;
+import com.emptypocketstudios.boardgame.engine.entity.components.notifications.NotificationTypes;
 import com.emptypocketstudios.boardgame.engine.pathfinding.cells.CellLink;
 import com.emptypocketstudios.boardgame.engine.pathfinding.cells.CellPathFinder;
-import com.emptypocketstudios.boardgame.engine.world.RegionNode;
-import com.emptypocketstudios.boardgame.engine.world.Cell;
-import com.emptypocketstudios.boardgame.engine.world.CellTypes;
-import com.emptypocketstudios.boardgame.engine.world.World;
-import com.emptypocketstudios.boardgame.engine.world.WorldChunk;
 import com.emptypocketstudios.boardgame.library.CameraHelper;
-import com.emptypocketstudios.boardgame.library.ColorMap;
 import com.emptypocketstudios.boardgame.library.GraphicsToolkit;
 import com.emptypocketstudios.boardgame.library.ShapeRenderUtilDrawer;
 
@@ -45,12 +34,11 @@ public class EngineRender {
     Rectangle viewportBounds = new Rectangle();
 
     WorldRenderer worldRenderer;
-    CellRenderer cellRenderer;
+    CellTextureRenderer cellRenderer;
     PathFindingRenderer pathRenderer;
 
     public EngineRender(TextureAtlas atlas) {
-        CellTypes.setupAtlas(atlas);
-        EntityType.setupAtlas(atlas);
+        EntityTextureAtlas.setupAtlas(atlas);
         NotificationTypes.setupAtlas(atlas);
 
         batch = new PolygonSpriteBatch();
@@ -65,7 +53,7 @@ public class EngineRender {
         helper = new CameraHelper();
         this.atlas = atlas;
         worldRenderer = new WorldRenderer(atlas, drawer);
-        cellRenderer = new CellRenderer(atlas, drawer);
+        cellRenderer = new CellTextureRenderer(atlas, drawer);
         pathRenderer = new PathFindingRenderer(atlas, drawer);
     }
 
@@ -80,6 +68,7 @@ public class EngineRender {
 
     public void render(Viewport viewport, Engine engine) {
         init(viewport);
+        batch.enableBlending();
         batch.begin();
 
         //Draw 2D Axis background

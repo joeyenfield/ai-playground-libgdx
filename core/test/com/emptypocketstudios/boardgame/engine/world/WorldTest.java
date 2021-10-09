@@ -17,11 +17,9 @@ public class WorldTest extends TestCase {
     public void testUpdateLinksRegions(){
         world = new World(new Rectangle(0,0,100,100), 10,10,10,10);
         world.loadAllChunks();
-        world.fillAllCells(CellTypes.GRASS);
+        world.fillAllCells(CellType.GRASS);
         world.update(1);
         WorldChunk chunk = world.getChunkByChunkId(1,1);
-        assertEquals(4,chunk.regionNodeLinks.size);
-        assertEquals(4,chunk.regionNodeDiagonalLinks.size);
     }
     public void testLoadAllChunks(){
         world = new World(new Rectangle(0,0,100,100), 3,3,5,5);
@@ -46,7 +44,7 @@ public class WorldTest extends TestCase {
                 assertNull(world.chunks[x][y]);
             }
         }
-        world.loadChunk(1,1);
+        world.worldLoadingProcessor.loadChunk(1,1);
 
         //Make sure only chunk is loaded
         assertNull(world.chunks[0][0]);
@@ -86,7 +84,7 @@ public class WorldTest extends TestCase {
         assertEquals(chunk.cells[1][0], cell.links[2][1]);
         assertEquals(chunk.cells[1][1], cell.links[2][2]);
 
-        world.loadChunk(0,1);
+        world.worldLoadingProcessor.loadChunk(0,1);
 
         assertNull(world.chunks[0][0]);
         assertNotNull(world.chunks[0][1]);

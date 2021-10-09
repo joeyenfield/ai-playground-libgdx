@@ -28,6 +28,7 @@ allprojects {
         aiVersion = '1.8.2'
         gdxControllersVersion = '2.1.0'
         shapedrawerVersion = '2.5.0'
+        visuiVersion = '1.5.0'
     }
 
     repositories {
@@ -110,6 +111,7 @@ project(":core") {
         api "com.badlogicgames.gdx-controllers:gdx-controllers-core:$gdxControllersVersion"
         api "de.tomgrill.gdxdialogs:gdx-dialogs-core:1.2.5"
         implementation "space.earlygrey:shapedrawer:$shapedrawerVersion"
+        implementation "com.kotcrab.vis:vis-ui:$visuiVersion"
 
         testImplementation "junit:junit:4.11"
         testImplementation "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"

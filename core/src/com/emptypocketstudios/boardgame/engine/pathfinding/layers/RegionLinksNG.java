@@ -1,13 +1,14 @@
 package com.emptypocketstudios.boardgame.engine.pathfinding.layers;
 
-import com.badlogic.gdx.utils.Disposable;
-import com.emptypocketstudios.boardgame.engine.world.WorldChunkRegionNodeLink;
+import com.badlogic.gdx.utils.Pool;
+import com.emptypocketstudios.boardgame.engine.world.RegionNode;
 
 import java.util.Objects;
 
-public class RegionLinksNG implements Comparable<RegionLinksNG>, Disposable {
+public class RegionLinksNG implements Comparable<RegionLinksNG>, Pool.Poolable {
     public RegionLinksNG parent;
-    public WorldChunkRegionNodeLink chunkLink;
+    public RegionNode regionStart;
+    public RegionNode regionEnd;
     public float weight = 1;
     public float travelWeight = 0;
     public float destWeight = 0;
@@ -15,7 +16,8 @@ public class RegionLinksNG implements Comparable<RegionLinksNG>, Disposable {
     @Override
     public String toString() {
         return "RL{ " +
-                "c=" + chunkLink +
+                "c=" + regionStart +
+                "c=" + regionEnd +
                 ", w=" + weight +
                 ", t=" + travelWeight +
                 ", d=" + destWeight +
@@ -27,23 +29,23 @@ public class RegionLinksNG implements Comparable<RegionLinksNG>, Disposable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         RegionLinksNG that = (RegionLinksNG) o;
-        return chunkLink.equals(that.chunkLink);
+        return regionStart.equals(that.regionStart) && regionEnd.equals(that.regionEnd);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(chunkLink);
+        return Objects.hash(regionStart, regionEnd);
     }
 
     @Override
     public int compareTo(RegionLinksNG regionLinks) {
-        return -Float.compare(this.weight, regionLinks.weight);
+        return Float.compare(this.weight, regionLinks.weight);
     }
 
     @Override
-    public void dispose() {
-        chunkLink = null;
+    public void reset() {
         parent = null;
-        weight = 1;
+        regionStart = null;
+        regionEnd = null;
     }
 }

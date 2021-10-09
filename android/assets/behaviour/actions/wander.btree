@@ -1,0 +1,18 @@
+BTREE name:Wander
+  ALL name:Wander
+    LOG name:Wander, message:"Going for a wander"
+
+    ANY name:Search Spot
+      CELL_SEARCH name:Search Spot, range:50, searchType:RANDOM, type:GRASS, memory:WANDER_POS
+      LOG name:Search Spot, message:"I cant find any spot" ,forcedResult:FAILURE
+    LOG name:Search Spot, message:"I found a spot, planning path!"
+
+    ANY name:Plan Path
+      PLAN_PATH name:Plan Path, memoryTargetPos:WANDER_POS, memory:WANDER_PATH, debug:true
+      LOG name:Plan Path, message:"I cant see any path to the spot", forcedResult:FAILURE
+    LOG name:Plan Path, message:"Im going to walk to the spot"
+
+    ANY name:Walk Path
+      FOLLOW_PATH name:Walk Path, memoryPathName:WANDER_PATH
+      LOG name:Walk Path, message:"I lost my way to the spot.", response:FAILURE
+    LOG name:Walk Path, message:"I've Arrived"

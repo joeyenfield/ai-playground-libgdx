@@ -1,20 +1,18 @@
 package com.emptypocketstudios.boardgame.library;
 
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Pools;
 
 public class IntersectorUtils {
 
     static Vector2 p12 = new Vector2();
     static Vector2 p1t = new Vector2();
 
-    public static float getParametricPosition(Vector2 p1, Vector2 p2, Vector2 pt){
+    public static float getParametricPosition(Vector2 p1, Vector2 p2, Vector2 pt) {
         float length = p12.set(p2).sub(p1).len();
-        p12.scl(1/length);
+        p12.scl(1 / length);
         p1t.set(pt).sub(p1);
-        return p12.dot(p1t)/length;
+        return p12.dot(p1t) / length;
     }
 
     /**
@@ -55,5 +53,18 @@ public class IntersectorUtils {
         closestY *= closestY;
 
         return closestX + closestY < radius * radius;
+    }
+
+    public static boolean intersects(Rectangle r1, Rectangle r2) {
+        System.out.println("R1 : " + r1.overlaps(r2));
+        System.out.println("R2 : " + r2.overlaps(r1));
+        return false;
+    }
+
+    public static void main(String[] args) {
+        Rectangle r1 = new Rectangle(-430.99982f, 5.0f, 1280.0f, 720.0001f);
+        Rectangle r2 = new Rectangle(0.0f, -200.0f, 200.0f, 200.0f);
+
+        intersects(r1, r2);
     }
 }

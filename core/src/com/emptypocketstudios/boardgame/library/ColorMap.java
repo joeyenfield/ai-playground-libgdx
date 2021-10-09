@@ -1,7 +1,6 @@
 package com.emptypocketstudios.boardgame.library;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.RandomXS128;
 
 import java.util.HashMap;

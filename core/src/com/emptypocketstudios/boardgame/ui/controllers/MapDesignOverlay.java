@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -13,18 +14,21 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.emptypocketstudios.boardgame.engine.Engine;
 import com.emptypocketstudios.boardgame.engine.world.Cell;
-import com.emptypocketstudios.boardgame.engine.world.CellTypes;
+import com.emptypocketstudios.boardgame.engine.world.CellType;
+import com.emptypocketstudios.boardgame.engine.world.WorldChunk;
 import com.emptypocketstudios.boardgame.ui.EngineControllerManager;
 
 public class MapDesignOverlay extends EngineController {
     int minTouchSizeCm = 50;
 
     boolean enabled = false;
-    short currentCellType = CellTypes.GRASS;
+    CellType currentCellType = CellType.GRASS;
 
     Button enabledButton;
     Button drawButton;
+    CheckBox isRoadCheckbox;
     SelectBox<String> cellType;
+    SelectBox<String> drawMode;
     Window controlDialog;
 
     public MapDesignOverlay(EngineControllerManager manager, Engine engine, Camera camera, Skin skin) {
@@ -40,12 +44,22 @@ public class MapDesignOverlay extends EngineController {
     public void setupGUI(Skin skin) {
         enabledButton = new TextButton("Map", skin, "toggle");
         drawButton = new TextButton("Draw", skin, "toggle");
+
+        drawMode = new SelectBox<String>(skin);
+        drawMode.setItems("ROAD+TYPE", "ROAD", "TYPE"
+        );
+        drawMode.setSelected("TYPE");
         cellType = new SelectBox<String>(skin);
-        cellType.setItems(CellTypes.names());
-        cellType.setSelected(CellTypes.name(CellTypes.GRASS));
-        currentCellType = (CellTypes.getId(cellType.getSelected()));
+        cellType.setItems(CellType.names());
+        cellType.setSelected(CellType.GRASS.name());
+        currentCellType = (CellType.valueOf(cellType.getSelected()));
+        isRoadCheckbox = new CheckBox("Is Road", skin);
 
         Table buttonHolder = new Table();
+        buttonHolder.add(drawMode).fillX();
+        buttonHolder.row();
+        buttonHolder.add(isRoadCheckbox).fillX();
+        buttonHolder.row();
         buttonHolder.add(cellType).fillX();
         buttonHolder.row();
         buttonHolder.add(drawButton).fillX();
@@ -78,7 +92,7 @@ public class MapDesignOverlay extends EngineController {
         cellType.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                currentCellType = (CellTypes.getId(cellType.getSelected()));
+                currentCellType = (CellType.valueOf(cellType.getSelected()));
             }
         });
     }
@@ -104,9 +118,16 @@ public class MapDesignOverlay extends EngineController {
     public boolean processCellSelection(Cell c) {
         if (c != null) {
             if (enabled) {
-                c.type = this.currentCellType;
-                c.lastChangeTime = System.currentTimeMillis();
-                engine.world.getChunkByWorldPosition(pos).updateRegionsRequired = true;
+                if (drawMode.getSelected().contains("TYPE")) {
+                    c.setType(this.currentCellType, 0);
+                }
+                if (drawMode.getSelected().contains("ROAD")) {
+                    c.setRoad(this.isRoadCheckbox.isChecked());
+                }
+                WorldChunk chunk = engine.world.getChunkAtWorldPosition(pos);
+                if (chunk != null) {
+                    chunk.updateRegionsRequired = true;
+                }
             }
             return true;
         }

@@ -1,0 +1,25 @@
+BTREE name:plant_wood
+    ALL name:Plant wood
+        LOG name:Plant Wood, message:"I want to plant some wood"
+
+        ANY name:Search CHOPPED_FOREST
+            CELL_SEARCH name:Search CHOPPED_FOREST, range:10, searchType:NEAR_SPIRAL, type:CHOPPED_FOREST, memory:CHOPPED_FOREST_TARGET
+            LOG name:Search CHOPPED_FOREST, message:"I cant find any CHOPPED_FOREST", forcedResult:FAILURE
+        LOG name:Search CHOPPED_FOREST, message:"I see CHOPPED_FOREST, planing path!"
+
+        ANY name:Planning Path
+            PLAN_PATH name:Planning Path, memoryTargetPos:CHOPPED_FOREST_TARGET, memory:PATH_TO_CHOPPED_FOREST, debug:true
+            LOG name:Planning Path, message:"I cant see any path to the CHOPPED_FOREST", forcedResult:FAILURE
+        LOG name:Planning Path, message:"Im going to walk to the CHOPPED_FOREST"
+        BRAIN_FORGET name:Forget path, memory:CHOPPED_FOREST_TARGET
+        
+        ANY name:Walk Path
+            FOLLOW_PATH name:Walk Path, memoryPathName:PATH_TO_CHOPPED_FOREST
+            LOG name:Walk Path, message:"I lost my way to the CHOPPED_FOREST.", response:FAILURE
+        LOG name:Walk Path, message:"I followed the path to the CHOPPED_FOREST."
+        BRAIN_FORGET name:Forget path, memory:PATH_TO_CHOPPED_FOREST
+
+        ANY name:Plant Forest
+            CHANGE_CELL name:Plant Forest, delay:5000, oldCellType:CHOPPED_FOREST, newCellType:FOREST, copyVariant:true
+            LOG name:Plant Forest, message:"I failed to plant the forest.", response:FAILURE
+        LOG name:Plant Forest, message:"I planted the forest."

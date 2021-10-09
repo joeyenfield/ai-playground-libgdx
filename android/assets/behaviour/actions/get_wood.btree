@@ -1,0 +1,25 @@
+BTREE name:get_wood
+  ALL name:Get wood
+    LOG name:Get Wood, message:"I want to get some wood"
+
+    ANY name:Search Forest
+      CELL_SEARCH name:Search Forest, range:10, searchType:NEAR_SPIRAL, type:FOREST, memory:FOREST_TARGET
+      LOG name:Search Forest, message:"I cant find any forest", forcedResult:FAILURE
+    LOG name:Search Forest, message:"I see a Forest, planing path!"
+
+    ANY name:Planning Path
+      PLAN_PATH name:Planning Path, memoryTargetPos:FOREST_TARGET, memory:PATH_TO_FOREST, debug:true
+      LOG name:Planning Path, message:"I cant see any path to the forest", forcedResult:FAILURE
+    LOG name:Planning Path, message:"Im going to walk to the forest"
+    BRAIN_FORGET name:Forget path, memory:FOREST_TARGET
+
+    ANY name:Walk to Forest
+      FOLLOW_PATH name:Walk to Forest, memoryPathName:PATH_TO_FOREST
+      LOG name:Walk to Forest Failed, message:"I lost my way to the forest.", response:FAILURE
+    LOG name:Walk to Forest, message:"I made it to the forest"
+    BRAIN_FORGET name:Forget path, memory:PATH_TO_FOREST
+
+    ANY name:Change
+      CHANGE_CELL name:Cut Down Forest, delay:5000, oldCellType:FOREST, newCellType:CHOPPED_FOREST, copyVariant:true
+      LOG name:Walk to Forest Failed, message:"I lost my way to the forest.", response:FAILURE
+    LOG name:Get Wood, message:"Success"

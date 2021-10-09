@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.emptypocketstudios.boardgame.engine.Engine;
-import com.emptypocketstudios.boardgame.library.GraphicsToolkit;
 import com.emptypocketstudios.boardgame.library.input.NamedInputMultiplexer;
 import com.emptypocketstudios.boardgame.library.ui.Scene2DToolkit;
 import com.emptypocketstudios.boardgame.ui.controllers.MapDesignOverlay;

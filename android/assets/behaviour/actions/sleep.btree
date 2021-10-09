@@ -1,0 +1,24 @@
+BTREE name:sleep, debugforcedResult:false
+  ANY name:Sleep 
+    ALL name:Sleep For a While
+      CONDITION HAS_TAG tag:HOME_OWNER
+      LOG message:Im tired so ill sleep in my home
+      
+      ANY name:Plan Path
+        PLAN_PATH name:Plan Path, memoryTargetPos:MY_HOSUSE_POS, memory:PATH_TO_HOUSE, debug:true
+        LOG name:Plan Path, message:"I cant find a path to water",forcedResult:FAILURE
+      LOG name:Plan Path, message:"I found a path, off I go!"
+
+      ANY name:Walk To House
+        FOLLOW_PATH name:Walk To House, memoryPathName:PATH_TO_HOUSE
+        LOG name:Walk To House, message:"I failed my path to House", forcedResult:FAILURE
+      LOG name:Walk To House, message:"I found the House!"
+      BRAIN_FORGET name:Forget path, memory:PATH_TO_HOUSE
+      
+      SUCCESS name:Sleeping, delay:5000
+      REST name:Sleeping, restore:100
+    ALL name:Sleep For a While
+      LOG message:Im tired so ill sleep here
+      SUCCESS name:Sleeping, delay:5000
+      REST name:Sleeping, restore:40
+

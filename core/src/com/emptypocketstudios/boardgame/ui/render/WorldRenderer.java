@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Rectangle;
 import com.emptypocketstudios.boardgame.engine.Engine;
+import com.emptypocketstudios.boardgame.engine.entity.EntityType;
 import com.emptypocketstudios.boardgame.engine.world.World;
 import com.emptypocketstudios.boardgame.engine.world.WorldChunk;
 
@@ -42,10 +43,20 @@ public class WorldRenderer {
         if (drawWorldBounds) {
             drawer.rectangle(world.boundary, Color.PURPLE, lineSize);
         }
+
+        // Render People
         for (int chunkX = 0; chunkX < world.chunksX; chunkX++) {
             for (int chunkY = 0; chunkY < world.chunksY; chunkY++) {
                 WorldChunk chunk = world.getChunkByChunkId(chunkX, chunkY);
-                worldChunkRenderer.renderWorldChunkEntities(engine, chunk);
+                worldChunkRenderer.renderWorldChunkEntities(engine, chunk, EntityType.HUMAN);
+            }
+        }
+
+        // Render Buildings
+        for (int chunkX = 0; chunkX < world.chunksX; chunkX++) {
+            for (int chunkY = 0; chunkY < world.chunksY; chunkY++) {
+                WorldChunk chunk = world.getChunkByChunkId(chunkX, chunkY);
+                worldChunkRenderer.renderWorldChunkEntities(engine, chunk, EntityType.BUILDING);
             }
         }
     }

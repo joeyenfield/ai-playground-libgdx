@@ -43,6 +43,7 @@ public class GameEngineScreen extends StageScreen {
         ;
         //Setup Renders
         render = new EngineRender(new TextureAtlas(Gdx.files.internal("art/game.atlas")));
+
     }
 
     @Override
@@ -73,7 +74,7 @@ public class GameEngineScreen extends StageScreen {
     @Override
     public void drawScreen(float delta) {
         camera.update();
-        ScreenUtils.clear(1, 1, 1, 1);
+        ScreenUtils.clear(0, 1, 1, 1);
         render.render(viewport, engine);
     }
 
@@ -94,8 +95,8 @@ public class GameEngineScreen extends StageScreen {
 
         int lineHeight = 25;
         font.draw(eventBatch, "FPS  : " + Gdx.graphics.getFramesPerSecond(), 0, -Gdx.graphics.getHeight() / 2 + 50);
-        font.draw(eventBatch, "POST : " + engine.postOffice.getMessageCount(), 0, -Gdx.graphics.getHeight() / 2 + 50+lineHeight);
-        font.draw(eventBatch, "AI   :" + engine.pathFinderManager.getMessageCount(), 0, -Gdx.graphics.getHeight() / 2 + 50+2 * lineHeight);
+        font.draw(eventBatch, "POST : " + engine.postOffice.getMessageCount(), 0, -Gdx.graphics.getHeight() / 2 + 50 + lineHeight);
+        font.draw(eventBatch, "AI   :" + engine.pathFinderManager.getMessageCount(), 0, -Gdx.graphics.getHeight() / 2 + 50 + 2 * lineHeight);
 
 
         eventBatch.end();

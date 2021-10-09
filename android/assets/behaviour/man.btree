@@ -1,0 +1,39 @@
+BTREE name:man
+  ANY name:Core Loop
+    #Claim House
+    ALL name: Getting House
+      NOTIFY_DIALOG name:Getting House, type:PATH_FOLLOW
+      BTREE name:Thirst, ref:actions/claim_house
+    #Sleeping
+    ALL name:Sleeping
+    CONDITION ENERGY threshold:20
+      NOTIFY_DIALOG name:Sleeping, type:SLEEP
+      BTREE name:Sleeping, ref:actions/sleep
+    #Drinking
+    ALL name: Getting Food
+    CONDITION HUNGER threshold:20
+      NOTIFY_DIALOG name:Getting Food, type:HUNGER
+      BTREE name:Food, ref:actions/get_food
+    #Drinking
+    ALL name: Getting Drink
+    CONDITION THIRST threshold:20
+      NOTIFY_DIALOG name:Getting Drink, type:THIRST
+      BTREE name:Thirst, ref:actions/get_drink
+    #Plant Tree
+    ALL name:Wood Planter
+      TIME_GATE name:Limit planting, interval:180000
+      BTREE name:Wandering, ref:actions/wander
+      NOTIFY_DIALOG name:Getting Drink, type:WOOD_PLANTING
+      BTREE name:Planting Wood, ref:actions/plant_wood
+    #Cut Tree
+    ALL name:Wood Cutter
+      TIME_GATE name:Wood Cutter, interval:180000
+      NOTIFY_DIALOG name:Wood Cutter, type:WOOD_CUTTING
+      BTREE name:Wood Cutter, ref:actions/get_wood
+    # Wandering
+    ALL name:Wandering
+      TIME_GATE name:Wandering, interval:60000
+      NOTIFY_DIALOG name:Wandering, type:PATH_CONFUSED
+      BTREE name:Wandering, ref:actions/wander
+      ALL name: Build Road
+        BTREE name:Building Road, ref:actions/build_road

@@ -3,29 +3,33 @@ package com.emptypocketstudios.boardgame.engine.world;
 import com.badlogic.gdx.math.GridPoint2;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 
 public class Cell implements Pool.Poolable {
-    public float resources = 1;
-    public short type = CellTypes.GRASS;
-    public RegionNode region = new RegionNode();
-    public GridPoint2 cellId = new GridPoint2();
-    public Vector2 pos = new Vector2();
-    public Rectangle boundary = new Rectangle();
+
+    public CellType type = CellType.GRASS;
+    public int typeVariant = 0;
     public long lastChangeTime = 0;
 
-    public Cell[][] links = new Cell[3][3];
+    public RegionNode region = new RegionNode();
+    public GridPoint2 cellId = new GridPoint2();
 
-    public void init(GridPoint2 chunkId, GridPoint2 cellId, Rectangle region, short cellType) {
+    public Vector2 pos = new Vector2();
+    public Rectangle boundary = new Rectangle();
+
+    public boolean isRoad = false;
+    public Cell[][] links = new Cell[3][3];
+    public WorldChunk chunk;
+
+    public void init(GridPoint2 chunkId, GridPoint2 cellId, Rectangle region, CellType cellType) {
         this.type = cellType;
         this.boundary.set(region);
         this.region.chunkId.set(chunkId);
         this.cellId.set(cellId);
+        this.isRoad = false;
         pos.x = this.boundary.x + this.boundary.width / 2;
         pos.y = this.boundary.y + this.boundary.height / 2;
-        this.resources = 1;
-        this.lastChangeTime = System.currentTimeMillis();
+        chunk.updateRegionsRequired = true;
     }
 
     public Cell getLink(int dx, int dy) {
@@ -39,7 +43,7 @@ public class Cell implements Pool.Poolable {
             // Up / Down / Left / Right
             Cell c = links[1 + dx][1 + dy];
             if (c != null) {
-                canMove = !CellTypes.isBlocked(c.type);
+                canMove = !c.type.blocked;
             }
         } else {
             // Diagonals
@@ -51,8 +55,8 @@ public class Cell implements Pool.Poolable {
             Cell x = links[1 + dx][1];
             Cell y = links[1][1 + dy];
 
-            if (z != null && !CellTypes.isBlocked(z.type)) {
-                canMove = (x != null && !CellTypes.isBlocked(x.type)) || (y != null && !CellTypes.isBlocked(y.type));
+            if (z != null && !z.type.blocked) {
+                canMove = (x != null && !x.type.blocked) || (y != null && !y.type.blocked);
             }
         }
 
@@ -94,14 +98,41 @@ public class Cell implements Pool.Poolable {
         unlinkAll();
     }
 
-    public boolean isLinkCellType(int dx, int dy, short cellType) {
+    public boolean isLinkCellType(int dx, int dy, CellType cellType) {
         boolean result = false;
         Cell c = getLink(dx, dy);
         result = c != null && c.type == cellType;
         return result;
     }
 
+    public boolean isLinkCellRoad(int dx, int dy) {
+        boolean result = false;
+        Cell c = getLink(dx, dy);
+        result = c != null && c.isRoad;
+        return result;
+    }
+
     public boolean containsWorldPos(Vector2 pos) {
         return boundary.contains(pos);
+    }
+
+    public void setType(CellType newCellType) {
+        setType(newCellType, 0, false);
+    }
+
+    public void setType(CellType newCellType, int variant) {
+        setType(newCellType, variant, false);
+    }
+
+    public void setType(CellType newCellType, int variant, boolean road) {
+        this.type = newCellType;
+        this.typeVariant = variant;
+        this.isRoad = road;
+        this.chunk.updateRegionsRequired = true;
+        this.lastChangeTime = System.currentTimeMillis();
+    }
+
+    public void setRoad(boolean road) {
+        setType(type, typeVariant, road);
     }
 }

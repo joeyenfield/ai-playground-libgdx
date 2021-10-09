@@ -1,6 +1,5 @@
 package com.emptypocketstudios.boardgame.library.ui;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;

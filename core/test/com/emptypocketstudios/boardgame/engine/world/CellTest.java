@@ -9,13 +9,13 @@ public class CellTest extends TestCase {
     @Override
     public void setUp() {
         cell = new Cell();
-        cell.type = CellTypes.GRASS;
+        cell.type = CellType.GRASS;
 
         for (int x = 0; x < 3; x++) {
             for (int y = 0; y < 3; y++) {
                 if (!(x == 1 && y == 1)) {
                     cell.links[x][y] = new Cell();
-                    cell.links[x][y].type = CellTypes.GRASS;
+                    cell.links[x][y].type = CellType.GRASS;
                 }
             }
         }

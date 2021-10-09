@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Pools;
 import com.emptypocketstudios.boardgame.engine.Engine;
 import com.emptypocketstudios.boardgame.engine.entity.Entity;
-import com.emptypocketstudios.boardgame.engine.entity.components.PathFollowComponent;
+import com.emptypocketstudios.boardgame.engine.entity.components.movement.PathFollowComponent;
 import com.emptypocketstudios.boardgame.engine.messages.Message;
 import com.emptypocketstudios.boardgame.engine.messages.MessageProcessor;
 import com.emptypocketstudios.boardgame.engine.pathfinding.message.PathFindingRequest;
@@ -16,7 +16,7 @@ public class PathFinderManager implements MessageProcessor<Message> {
     public static final String MESSAGE_TARGET_NAME = "PATHFINDER";
 
     public Engine engine;
-    PathFinder pathFinder;
+    public PathFinder pathFinder;
     PriorityQueue<PathFindingRequest> requests = new PriorityQueue<>();
     long start = 0;
 
@@ -77,7 +77,12 @@ public class PathFinderManager implements MessageProcessor<Message> {
             } else {
                 // Send response
                 response.setSource(request);
-                engine.postOffice.send(response);
+
+                if (request.directResponse != null) {
+                    request.directResponse.processResponse(response);
+                } else {
+                    engine.postOffice.send(response);
+                }
             }
         }
     }

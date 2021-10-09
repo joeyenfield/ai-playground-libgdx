@@ -26,7 +26,7 @@ public class CameraHelper {
 		bounds.width = endPoint.x - startPoint.x;
 		bounds.height = endPoint.y - startPoint.y;
 
-		RectangeUtils.ensurePositive(bounds);
+		RectangleUtils.ensurePositive(bounds);
 	}
 
 	public void getBounds(Camera camera, Rectangle bounds) {
@@ -43,7 +43,7 @@ public class CameraHelper {
 		bounds.width = endPoint.x - startPoint.x;
 		bounds.height = endPoint.y - startPoint.y;
 
-		RectangeUtils.ensurePositive(bounds);
+		RectangleUtils.ensurePositive(bounds);
 	}
 
 	public float getScreenToCameraPixelX(Camera camera, float size) {

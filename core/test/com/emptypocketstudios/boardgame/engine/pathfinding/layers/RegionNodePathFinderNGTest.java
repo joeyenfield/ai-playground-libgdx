@@ -1,195 +1,176 @@
 package com.emptypocketstudios.boardgame.engine.pathfinding.layers;
 
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
+import com.emptypocketstudios.boardgame.TestUtil;
+import com.emptypocketstudios.boardgame.engine.Engine;
+import com.emptypocketstudios.boardgame.engine.EngineSetupConfig;
 import com.emptypocketstudios.boardgame.engine.pathfinding.PathFindingResultEnum;
 import com.emptypocketstudios.boardgame.engine.world.Cell;
-import com.emptypocketstudios.boardgame.engine.world.CellTypes;
+import com.emptypocketstudios.boardgame.engine.world.CellType;
 import com.emptypocketstudios.boardgame.engine.world.RegionNode;
 import com.emptypocketstudios.boardgame.engine.world.World;
 import com.emptypocketstudios.boardgame.engine.world.WorldChunk;
+import com.emptypocketstudios.boardgame.engine.world.map.MapGeneratorType;
 
 import junit.framework.TestCase;
 
-import org.junit.Test;
-
 public class RegionNodePathFinderNGTest extends TestCase {
-    World world;
+
     RegionNodePathFinderNG pathFinder;
+    Engine engine;
 
-    public void setUp() throws Exception {
+    @Override
+    protected void setUp() throws Exception {
         super.setUp();
+
+        EngineSetupConfig config = new EngineSetupConfig();
+        config.chunksX = 3;
+        config.chunksY = 3;
+        config.cellsPerChunkX = 5;
+        config.cellsPerChunkY = 5;
+        config.entities = 0;
+        config.buildings = 0;
+        config.towns = 0;
+        config.map = MapGeneratorType.FLAT_LAND;
+
         pathFinder = new RegionNodePathFinderNG();
-        Rectangle region = new Rectangle(0, 0, 100, 100);
-        world = new World(region, 10, 10, 10, 10);
-        world.loadAllChunks();
-//        world.fillAllCells(CellTypes.GRASS);
-        world.update(1);
-    }
-
-    @Test
-    public void testSingleNode() {
-        Array<RegionNode> path = new Array<>();
-        Cell start = world.getCellByCellId(1, 1);
-        Cell end = world.getCellByCellId(5, 5);
-        pathFinder.search(world, start, end, path, 9999,false);
-        assertEquals(1, path.size);
-        assertEquals(0, path.get(0).chunkId.x);
-        assertEquals(0, path.get(0).chunkId.y);
-    }
-
-    @Test
-    public void testCrossNodes() {
-        Array<RegionNode> path = new Array<>();
-        Cell start = world.getCellByCellId(1, 1);
-        Cell end = world.getCellByCellId(15, 1);
-
-        //Verfity selected cells in the right chunks
-        assertEquals(0, start.region.chunkId.x);
-        assertEquals(0, start.region.chunkId.y);
-
-        //Verfity selected cells in the right chunks
-        assertEquals(1, end.region.chunkId.x);
-        assertEquals(0, end.region.chunkId.y);
-
-
-        PathFindingResultEnum result = pathFinder.search(world, start, end, path, 99999,false);
-        assertEquals(PathFindingResultEnum.SUCCESS,result);
-        RegionNode startRegion = new RegionNode();
-        startRegion.set(0, 0, 1);
-        RegionNode targetRegion = new RegionNode();
-        targetRegion.set(1, 0, 1);
-
-        assertEquals(2, path.size);
-        assertTrue(path.contains(startRegion, false));
-        assertTrue(path.contains(targetRegion, false));
-    }
-
-    @Test
-    public void testCrossNodesHigher() {
-        Array<RegionNode> path = new Array<>();
-        Cell start = world.getCellByCellId(15, 95);
-        Cell end = world.getCellByCellId(25, 95);
-
-        //Verfity selected cells in the right chunks
-        assertEquals(1, start.region.chunkId.x);
-        assertEquals(9, start.region.chunkId.y);
-
-        //Verfity selected cells in the right chunks
-        assertEquals(2, end.region.chunkId.x);
-        assertEquals(9, end.region.chunkId.y);
-
-
-        pathFinder.search(world, start, end, path, 9999,false);
-
-        RegionNode startRegion = new RegionNode();
-        startRegion.set(1, 9, 1);
-        RegionNode targetRegion = new RegionNode();
-        targetRegion.set(2, 9, 1);
-
-        assertEquals(2, path.size);
-        assertTrue(path.contains(startRegion, false));
-        assertTrue(path.contains(targetRegion, false));
-    }
-
-
-    @Test
-    public void testCrossNodesWithWall() {
-        Array<RegionNode> path = new Array<>();
-        Cell start = world.getCellByCellId(1, 1);
-        Cell end = world.getCellByCellId(15, 1);
-
-        //Verfity selected cells in the right chunks
-        assertEquals(0, start.region.chunkId.x);
-        assertEquals(0, start.region.chunkId.y);
-
-        //Verfity selected cells in the right chunks
-        assertEquals(1, end.region.chunkId.x);
-        assertEquals(0, end.region.chunkId.y);
-
-        //Block off left side
-        WorldChunk chunk = world.getChunkByChunkId(end.region.chunkId);
-        for (int y = 0; y < chunk.numCellsY; y++) {
-            chunk.cells[0][y].type = CellTypes.ROCK;
+        engine = TestUtil.setupTestWorld(config);
+        engine.update(1);
+        World world = engine.world;
+        for (int cX = 0; cX < world.getChunksX(); cX++) {
+            for (int cY = 0; cY < world.getChunksY(); cY++) {
+                WorldChunk chunk = world.getChunkByChunkId(cX, cY);
+                for (int x = 0; x < chunk.getCellsX(); x++) {
+                    for (int y = 0; y < chunk.getCellsY(); y++) {
+                        Cell cell = chunk.getCellByIndex(x, y);
+                        if (cell == null) {
+                            System.out.println("Chunk[" + cX + "," + cY + "] - Cell[" + x + "," + y + "]");
+                        }
+                        if (x == 2 | y == 2) {
+                            cell.setType(CellType.SAND);
+                        }
+                    }
+                }
+            }
         }
-        chunk.updateRegions();
-
-        pathFinder.search(world, start, end, path, 9999,false);
-
-        RegionNode startRegion = new RegionNode();
-        startRegion.set(0, 0, 1);
-        RegionNode targetRegion = new RegionNode();
-        targetRegion.set(1, 0, 1);
-
-        assertEquals(4, path.size);
-        assertTrue(path.contains(startRegion, false));
-        assertTrue(path.contains(targetRegion, false));
+        engine.update(1);
     }
 
-    @Test
-    public void testGetLinksEdgeWhenSameRegion() {
-        WorldChunk chunk = world.getChunkByChunkId(0, 0);
-        assertNotNull(chunk);
+    public void testSetup() {
+        World world = engine.world;
+        assertEquals(5, world.getChunkByChunkId(0, 0).getRegions().size);
+        assertEquals(5, world.getChunkByChunkId(1, 0).getRegions().size);
+        assertEquals(5, world.getChunkByChunkId(2, 0).getRegions().size);
+        assertEquals(5, world.getChunkByChunkId(0, 1).getRegions().size);
+        assertEquals(5, world.getChunkByChunkId(1, 1).getRegions().size);
+        assertEquals(5, world.getChunkByChunkId(2, 1).getRegions().size);
+        assertEquals(5, world.getChunkByChunkId(0, 2).getRegions().size);
+        assertEquals(5, world.getChunkByChunkId(1, 2).getRegions().size);
+        assertEquals(5, world.getChunkByChunkId(2, 2).getRegions().size);
 
-        Array<RegionLinksNG> links = new Array<>();
-        pathFinder.getLinks(chunk, world.getCellByCellId(0,0).region, links);
-        assertEquals(2, links.size);
-
-        RegionLinks linkUp = new RegionLinks();
-        linkUp.source = new RegionNode();
-        linkUp.source.regionId = 1;
-        linkUp.source.chunkId.set(0, 0);
-        linkUp.current = new RegionNode();
-        linkUp.current.regionId = 1;
-        linkUp.current.chunkId.set(0, 1);
-
-        RegionLinks linkRight = new RegionLinks();
-        linkRight.source = new RegionNode();
-        linkRight.source.regionId = 1;
-        linkRight.source.chunkId.set(0, 0);
-        linkRight.current = new RegionNode();
-        linkRight.current.regionId = 1;
-        linkRight.current.chunkId.set(1, 0);
-
-        fail();
-//        assertTrue(links.contains(linkUp, false));
-//        assertTrue(links.contains(linkRight, false));
+        assertEquals(45, world.regionLinks.size);
+        assertEquals(45, world.diagonalRegionLinks.size);
+        world.printRegions();
+        world.printCellType();
     }
 
-    @Test
-    public void testGetLinksOnlyFollowsCurrentRegion() {
-        WorldChunk chunk = world.getChunkByChunkId(0, 0);
-        assertNotNull(chunk);
-        chunk.cells[0][9].region.regionId = 10;
-        RegionLinks current = new RegionLinks();
-        current.current = new RegionNode();
-        current.current.set(0, 0, 10);
+    public void testRegionInSameWithoutDiagonals() {
+        World world = engine.world;
+        world.fillAllCells(CellType.GRASS);
+        world.update(1);
 
-        fail();
-//        Array<RegionLinks> links = new Array<>();
-//        pathFinder.getLinks(chunk, current, links);
-//        assertEquals(1, links.size);
+        assertEquals(9, world.regionLinks.size);
+        assertEquals(9, world.diagonalRegionLinks.size);
+
+        Cell startCell = world.getChunkByChunkId(0, 0).getCellByCellId(0, 0);
+        Cell endCell = world.getChunkByChunkId(0, 0).getCellByCellId(0, 0);
+
+        Array<RegionNode> regions = new Array<>();
+        pathFinder.setup(world, startCell, endCell, regions, 9999, false);
+        pathFinder.processAll();
+        assertEquals(1, regions.size);
     }
 
-    @Test
-    public void testGetLinks() {
-        Array<RegionNode> path = new Array<>();
-        Cell start = world.getCellByCellId(15, 85);
-        WorldChunk chunk = world.getChunkByChunkId(start.region.chunkId);
-        //Verfity selected cells in the right chunks
-        assertEquals(1, start.region.chunkId.x);
-        assertEquals(8, start.region.chunkId.y);
-        assertEquals(4,chunk.regionNodeLinks.size);
+    public void testRegionInSameWithDiagonals() {
+        World world = engine.world;
+        world.fillAllCells(CellType.GRASS);
+        world.update(1);
 
-        Array<RegionLinksNG> links = new Array<>();
-        pathFinder.getLinks(world.getChunkByChunkId(start.region.chunkId), start.region, links);
-        assertEquals(4, links.size);
+        assertEquals(9, world.regionLinks.size);
+        assertEquals(9, world.diagonalRegionLinks.size);
+
+        Cell startCell = world.getChunkByChunkId(0, 0).getCellByCellId(0, 0);
+        Cell endCell = world.getChunkByChunkId(0, 0).getCellByCellId(0, 0);
+
+        Array<RegionNode> regions = new Array<>();
+        pathFinder.setup(world, startCell, endCell, regions, 9999, true);
+        pathFinder.processAll();
+        assertEquals(1, regions.size);
     }
 
-    @Test
-    public void testGetLinksDoesNotFollowBlockedPaths() {
-        /*
-        Tese should be to make sure if next cell is blocked off it will not follow it
-         */
+    public void testCrossRegionWithoutDiagonals() {
+        World world = engine.world;
+        world.fillAllCells(CellType.GRASS);
+        world.update(1);
+
+        assertEquals(9, world.regionLinks.size);
+        assertEquals(9, world.diagonalRegionLinks.size);
+
+        Cell cell;
+        Array<RegionNode> nodes;
+        Array<RegionNode> nodesDiagonal;
+
+        cell = world.getChunkByChunkId(0, 0).getCellByIndex(0, 0);
+        nodes = world.regionLinks.get(cell.region);
+        nodesDiagonal = world.diagonalRegionLinks.get(cell.region);
+        assertEquals(3, nodes.size);
+        assertEquals(4, nodesDiagonal.size);
+
+        cell = world.getChunkByChunkId(1, 1).getCellByIndex(0, 0);
+        nodes = world.regionLinks.get(cell.region);
+        nodesDiagonal = world.diagonalRegionLinks.get(cell.region);
+        assertEquals(5, nodes.size);
+        assertEquals(9, nodesDiagonal.size);
+
+
+        Array<RegionNode> regions;
+        Cell startCell;
+        Cell endCell;
+
+        //Region DOWN
+        startCell = world.getChunkByChunkId(0, 1).getCellByIndex(0, 0);
+        endCell = world.getChunkByChunkId(0, 0).getCellByIndex(0, 0);
+        regions = new Array<>();
+        pathFinder.setup(world, startCell, endCell, regions, 9999, false);
+        assertEquals(PathFindingResultEnum.SUCCESS, pathFinder.processAll());
+        assertEquals(2, regions.size);
+
+        //Region UP
+        startCell = world.getChunkByChunkId(0, 0).getCellByIndex(0, 0);
+        endCell = world.getChunkByChunkId(0, 1).getCellByIndex(0, 0);
+        regions = new Array<>();
+        pathFinder.setup(world, startCell, endCell, regions, 9999, false);
+        assertEquals(PathFindingResultEnum.SUCCESS, pathFinder.processAll());
+        assertEquals(2, regions.size);
+
+        //Region Right
+        startCell = world.getChunkByChunkId(0, 0).getCellByIndex(0, 0);
+        endCell = world.getChunkByChunkId(1, 0).getCellByIndex(0, 0);
+        regions = new Array<>();
+        pathFinder.setup(world, startCell, endCell, regions, 9999, false);
+        assertEquals(PathFindingResultEnum.SUCCESS,
+                pathFinder.processAll()
+        );
+        assertEquals(2, regions.size);
+
+        //Region Left
+        startCell = world.getChunkByChunkId(1, 0).getCellByIndex(0, 0);
+        endCell = world.getChunkByChunkId(0, 0).getCellByIndex(0, 0);
+        regions = new Array<>();
+        pathFinder.setup(world, startCell, endCell, regions, 9999, false);
+        assertEquals(PathFindingResultEnum.SUCCESS, pathFinder.processAll());
+        assertEquals(2, regions.size);
+
+
     }
 }

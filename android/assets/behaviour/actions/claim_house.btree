@@ -1,0 +1,36 @@
+BTREE name:claim_house
+  CONDITION MISSING_TAG tag:HOME_OWNER
+  ALL name:Claim House
+    LOG name:Claim House, message:"Im getting a house"
+
+    ANY name:Search House
+      ENTITY_SEARCH name:Search House, range:5000, searchType:NEAREST, tag:EMPTY_HOUSE, memory:MY_HOUSE_NAME
+      LOG name:Search House, message:"I cant find any House", forcedResult:FAILURE
+    LOG name:Search House, message:"I found House, planning path!"
+
+    ENTITY_EXTRACT name:Search House, memoryEntityName:MY_HOUSE_NAME, field:POS, memory:MY_HOSUSE_POS
+
+    ANY name:Plan Path
+      PLAN_PATH name:Plan Path, memoryTargetPos:MY_HOSUSE_POS, memory:PATH_TO_HOUSE
+      LOG name:Plan Path, message:"I cant find a path to the house",forcedResult:FAILURE
+    LOG name:Plan Path, message:"I found a path, off I go!"
+
+    ANY name:Walk To House
+      FOLLOW_PATH name:Walk To House, memoryPathName:PATH_TO_HOUSE
+      LOG name:Walk To House, message:"I failed my path to House", forcedResult:FAILURE
+    LOG name:Walk To House, message:"I found the House!"
+    BRAIN_FORGET name:Forget path, memory:PATH_TO_HOUSE
+
+    ALL name:Claim House
+      ANY name:Claim House
+        ENTITY_REMOVE_TAG name:Claim House, memoryEntityName:MY_HOUSE_NAME, tag:EMPTY_HOUSE
+        LOG name:Claim House, message:"I failed ENTITY_REMOVE_TAG ( EMPTY_HOUSE ) ", forcedResult:FAILURE
+      ANY name:Claim House
+        ENTITY_ADD_TAG name:Claim House, memoryEntityName:MY_HOUSE_NAME, tag:OCCUPIED
+        LOG name:Claim House, message:"I failed ENTITY_ADD_TAG ( OCCUPIED ) ", forcedResult:FAILURE
+      ANY name:Claim House
+        ENTITY_ADD_TAG name:Claim House, tag:HOME_OWNER
+        LOG name:Claim House, message:"I failed ENTITY_ADD_TAG ( HOME_OWNER )", forcedResult:FAILURE
+      ANY name:Claim House
+        NOTIFY_DIALOG name:Remove Overlay, type:NONE, memoryEntityName:MY_HOUSE_NAME
+        LOG name:Claim House, message:"I failed NOTIFY_DIALOG", forcedResult:FAILURE

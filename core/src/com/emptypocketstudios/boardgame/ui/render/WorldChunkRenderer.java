@@ -3,27 +3,29 @@ package com.emptypocketstudios.boardgame.ui.render;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.emptypocketstudios.boardgame.engine.Engine;
 import com.emptypocketstudios.boardgame.engine.entity.Entity;
+import com.emptypocketstudios.boardgame.engine.entity.EntityType;
 import com.emptypocketstudios.boardgame.engine.world.WorldChunk;
 
 import space.earlygrey.shapedrawer.ShapeDrawer;
 
 public class WorldChunkRenderer {
 
-    public boolean drawAllChunks = true;
+    public boolean drawAllChunks = false;
     ShapeDrawer drawer;
     Rectangle viewportBounds = new Rectangle();
     float lineSize;
     TextureAtlas atlas;
-    CellRenderer cellRenderer;
+    CellTextureRenderer cellRenderer;
+    CellRegionRenderer cellRegionRenderer;
     EntityRenderer entityRenderer;
 
     public WorldChunkRenderer(TextureAtlas atlas, ShapeDrawer drawer) {
         this.drawer = drawer;
         this.atlas = atlas;
-        this.cellRenderer = new CellRenderer(atlas, drawer);
+        this.cellRenderer = new CellTextureRenderer(atlas, drawer);
+        this.cellRegionRenderer = new CellRegionRenderer(drawer);
         this.entityRenderer = new EntityRenderer(atlas, drawer);
     }
 
@@ -32,6 +34,7 @@ public class WorldChunkRenderer {
         this.lineSize = lineSize;
         this.cellRenderer.update(viewportBounds, lineSize);
         this.entityRenderer.update(viewportBounds, lineSize);
+        this.cellRegionRenderer.update(viewportBounds, lineSize);
     }
 
 
@@ -47,6 +50,9 @@ public class WorldChunkRenderer {
         for (int cellX = 0; cellX < chunk.numCellsX; cellX++) {
             for (int cellY = 0; cellY < chunk.numCellsY; cellY++) {
                 cellRenderer.textureCell(engine, chunk.getCellByIndex(cellX, cellY));
+
+//                cellRenderer.renderDebugCell(engine, chunk.getCellByIndex(cellX, cellY));
+                cellRegionRenderer.renderCellRegionBoundary(engine, chunk.getCellByIndex(cellX, cellY));
             }
         }
 
@@ -55,16 +61,18 @@ public class WorldChunkRenderer {
         }
     }
 
-    public void renderWorldChunkEntities(Engine engine, WorldChunk chunk) {
+    public void renderWorldChunkEntities(Engine engine, WorldChunk chunk, EntityType type) {
         if (chunk == null || !viewportBounds.overlaps(chunk.boundary)) {
             return;
         }
         for (int i = 0; i < chunk.entities.size; i++) {
             Entity entity = chunk.entities.get(i);
-            if (entity.overlaps(viewportBounds)) {
-                entityRenderer.textureEntity(engine, entity);
-                if(entity == engine.engineControllerManager.pathfindingControls.selectedEntity) {
-                    entityRenderer.debugEntity(engine, entity);
+            if (type == null || entity.type == type) {
+                if (entity.overlaps(viewportBounds)) {
+                    entityRenderer.textureEntity(engine, entity);
+                    if (entity == engine.engineControllerManager.pathfindingControls.selectedEntity) {
+                        entityRenderer.debugEntity(engine, entity);
+                    }
                 }
             }
         }

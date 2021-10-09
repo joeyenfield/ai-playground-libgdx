@@ -1,0 +1,24 @@
+BTREE name:get_drink
+  ALL name:Get Drink
+    LOG name:Get Drink, message:"Im getting a drink"
+
+    ANY name:Search Water
+      CELL_SEARCH name:Search Water, range:5000, type:SHALLOW_WATER, searchType:NEAR_SPIRAL, memory:WATER_TARGET
+      LOG name:Search Water, message:"I cant find any water", forcedResult:FAILURE
+    LOG name:Search Water, message:"I found water, planning path!"
+
+    ANY name:Plan Path
+      PLAN_PATH name:Plan Path, memoryTargetPos:WATER_TARGET, memory:PATH_TO_WATER, debug:true
+      LOG name:Plan Path, message:"I cant find a path to water",forcedResult:FAILURE
+    LOG name:Plan Path, message:"I found a path, off I go!"
+    BRAIN_FORGET name:Forget path, memory:WATER_TARGET
+
+
+    ANY name:Walk To Water
+      FOLLOW_PATH name:Walk To Water, memoryPathName:PATH_TO_WATER
+      LOG name:Walk To Water, message:"I failed my path to water", forcedResult:FAILURE
+    LOG name:Walk To Water, message:"I found the water!"
+    BRAIN_FORGET name:Forget path, memory:PATH_TO_WATER
+
+    DRINK name:Drink Water, restore:100
+    LOG name:Drink Water, message:"I drank water"

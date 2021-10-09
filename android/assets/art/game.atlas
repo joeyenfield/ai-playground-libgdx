@@ -151,744 +151,807 @@ Environment/medievalEnvironment
   orig: 128, 128
   offset: 0, 0
   index: 21
-Structure/medievalStructure
+Environment/medievalEnvironment
   rotate: false
   xy: 2, 1122
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 1
-Structure/medievalStructure
+  index: 22
+Environment/medievalEnvironment
   rotate: false
   xy: 132, 1252
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 2
+  index: 23
 Structure/medievalStructure
   rotate: false
   xy: 262, 1382
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 3
+  index: 1
 Structure/medievalStructure
   rotate: false
   xy: 392, 1512
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 4
+  index: 2
 Structure/medievalStructure
   rotate: false
   xy: 522, 1642
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 5
+  index: 3
 Structure/medievalStructure
   rotate: false
   xy: 652, 1772
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 6
+  index: 4
 Structure/medievalStructure
   rotate: false
   xy: 782, 1902
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 7
+  index: 5
 Structure/medievalStructure
   rotate: false
   xy: 2, 992
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 8
+  index: 6
 Structure/medievalStructure
   rotate: false
   xy: 132, 1122
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 9
+  index: 7
 Structure/medievalStructure
   rotate: false
   xy: 262, 1252
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 10
+  index: 8
 Structure/medievalStructure
   rotate: false
   xy: 392, 1382
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 11
+  index: 9
 Structure/medievalStructure
   rotate: false
   xy: 522, 1512
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 12
+  index: 10
 Structure/medievalStructure
   rotate: false
   xy: 652, 1642
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 13
+  index: 11
 Structure/medievalStructure
   rotate: false
   xy: 782, 1772
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 14
+  index: 12
 Structure/medievalStructure
   rotate: false
   xy: 912, 1902
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 15
+  index: 13
 Structure/medievalStructure
   rotate: false
   xy: 2, 862
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 16
+  index: 14
 Structure/medievalStructure
   rotate: false
   xy: 132, 992
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 17
+  index: 15
 Structure/medievalStructure
   rotate: false
   xy: 262, 1122
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 18
+  index: 16
 Structure/medievalStructure
   rotate: false
   xy: 392, 1252
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 19
+  index: 17
 Structure/medievalStructure
   rotate: false
   xy: 522, 1382
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 20
+  index: 18
 Structure/medievalStructure
   rotate: false
   xy: 652, 1512
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 21
+  index: 19
 Structure/medievalStructure
   rotate: false
   xy: 782, 1642
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 22
+  index: 20
 Structure/medievalStructure
   rotate: false
   xy: 912, 1772
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 23
-Tile/medievalTile
+  index: 21
+Structure/medievalStructure
   rotate: false
   xy: 1042, 1902
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 1
-Tile/medievalTile
+  index: 22
+Structure/medievalStructure
   rotate: false
   xy: 2, 732
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 2
+  index: 23
 Tile/medievalTile
   rotate: false
   xy: 132, 862
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 3
+  index: 1
 Tile/medievalTile
   rotate: false
   xy: 262, 992
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 4
+  index: 2
 Tile/medievalTile
   rotate: false
   xy: 392, 1122
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 5
+  index: 3
 Tile/medievalTile
   rotate: false
   xy: 522, 1252
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 6
+  index: 4
 Tile/medievalTile
   rotate: false
   xy: 652, 1382
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 7
+  index: 5
 Tile/medievalTile
   rotate: false
   xy: 782, 1512
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 8
+  index: 6
 Tile/medievalTile
   rotate: false
   xy: 912, 1642
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 9
+  index: 7
 Tile/medievalTile
   rotate: false
   xy: 1042, 1772
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 10
+  index: 8
 Tile/medievalTile
   rotate: false
   xy: 1172, 1902
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 11
+  index: 9
 Tile/medievalTile
   rotate: false
   xy: 2, 602
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 12
+  index: 10
 Tile/medievalTile
   rotate: false
   xy: 132, 732
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 13
+  index: 11
 Tile/medievalTile
   rotate: false
   xy: 262, 862
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 14
+  index: 12
 Tile/medievalTile
   rotate: false
   xy: 392, 992
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 15
+  index: 13
 Tile/medievalTile
   rotate: false
   xy: 522, 1122
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 16
+  index: 14
 Tile/medievalTile
   rotate: false
   xy: 652, 1252
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 17
+  index: 15
 Tile/medievalTile
   rotate: false
   xy: 782, 1382
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 18
+  index: 16
 Tile/medievalTile
   rotate: false
   xy: 912, 1512
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 19
+  index: 17
 Tile/medievalTile
   rotate: false
   xy: 1042, 1642
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 20
+  index: 18
 Tile/medievalTile
   rotate: false
   xy: 1172, 1772
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 21
+  index: 19
 Tile/medievalTile
   rotate: false
   xy: 1302, 1902
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 22
+  index: 20
 Tile/medievalTile
   rotate: false
   xy: 2, 472
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 23
+  index: 21
 Tile/medievalTile
   rotate: false
   xy: 132, 602
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 24
+  index: 22
 Tile/medievalTile
   rotate: false
   xy: 262, 732
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 25
+  index: 23
 Tile/medievalTile
   rotate: false
   xy: 392, 862
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 26
+  index: 24
 Tile/medievalTile
   rotate: false
   xy: 522, 992
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 27
+  index: 25
 Tile/medievalTile
   rotate: false
   xy: 652, 1122
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 28
+  index: 26
 Tile/medievalTile
   rotate: false
   xy: 782, 1252
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 29
+  index: 27
 Tile/medievalTile
   rotate: false
   xy: 912, 1382
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 30
+  index: 28
 Tile/medievalTile
   rotate: false
   xy: 1042, 1512
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 31
+  index: 29
 Tile/medievalTile
   rotate: false
   xy: 1172, 1642
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 32
+  index: 30
 Tile/medievalTile
   rotate: false
   xy: 1302, 1772
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 33
+  index: 31
 Tile/medievalTile
   rotate: false
   xy: 1432, 1902
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 34
+  index: 32
 Tile/medievalTile
   rotate: false
   xy: 2, 342
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 35
+  index: 33
 Tile/medievalTile
   rotate: false
   xy: 132, 472
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 36
+  index: 34
 Tile/medievalTile
   rotate: false
   xy: 262, 602
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 37
+  index: 35
 Tile/medievalTile
   rotate: false
   xy: 392, 732
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 38
+  index: 36
 Tile/medievalTile
   rotate: false
   xy: 522, 862
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 39
+  index: 37
 Tile/medievalTile
   rotate: false
   xy: 652, 992
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 40
+  index: 38
 Tile/medievalTile
   rotate: false
   xy: 782, 1122
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 41
+  index: 39
 Tile/medievalTile
   rotate: false
   xy: 912, 1252
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 42
+  index: 40
 Tile/medievalTile
   rotate: false
   xy: 1042, 1382
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 43
+  index: 41
 Tile/medievalTile
   rotate: false
   xy: 1172, 1512
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 44
+  index: 42
 Tile/medievalTile
   rotate: false
   xy: 1302, 1642
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 45
+  index: 43
 Tile/medievalTile
   rotate: false
   xy: 1432, 1772
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 46
+  index: 44
 Tile/medievalTile
   rotate: false
   xy: 1562, 1902
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 47
+  index: 45
 Tile/medievalTile
   rotate: false
   xy: 2, 212
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 48
+  index: 46
 Tile/medievalTile
   rotate: false
   xy: 132, 342
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 49
+  index: 47
 Tile/medievalTile
   rotate: false
   xy: 262, 472
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 50
+  index: 48
 Tile/medievalTile
   rotate: false
   xy: 392, 602
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 51
+  index: 49
 Tile/medievalTile
   rotate: false
   xy: 522, 732
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 52
+  index: 50
 Tile/medievalTile
   rotate: false
   xy: 652, 862
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 53
+  index: 51
 Tile/medievalTile
   rotate: false
   xy: 782, 992
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 54
+  index: 52
 Tile/medievalTile
   rotate: false
   xy: 912, 1122
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 55
+  index: 53
 Tile/medievalTile
   rotate: false
   xy: 1042, 1252
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 56
+  index: 54
 Tile/medievalTile
   rotate: false
   xy: 1172, 1382
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 57
+  index: 55
 Tile/medievalTile
   rotate: false
   xy: 1302, 1512
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 58
+  index: 56
 Tile/medievalTile
   rotate: false
   xy: 1432, 1642
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 59
-Unit/medievalUnit
+  index: 57
+Tile/medievalTile
   rotate: false
   xy: 1562, 1772
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 1
-Unit/medievalUnit
+  index: 58
+Tile/medievalTile
   rotate: false
   xy: 1692, 1902
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 2
-Unit/medievalUnit
+  index: 59
+Tile/medievalTile
   rotate: false
   xy: 2, 82
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 3
-Unit/medievalUnit
+  index: 64
+Tile/medievalTile
   rotate: false
   xy: 132, 212
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 4
-Unit/medievalUnit
+  index: 65
+Tile/medievalTile
   rotate: false
   xy: 262, 342
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 5
-Unit/medievalUnit
+  index: 66
+Tile/medievalTile
   rotate: false
   xy: 392, 472
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 6
-Unit/medievalUnit
+  index: 67
+Tile/medievalTile
   rotate: false
   xy: 522, 602
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 7
-Unit/medievalUnit
+  index: 68
+Tile/medievalTile
   rotate: false
   xy: 652, 732
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 8
-Unit/medievalUnit
+  index: 69
+Tile/medievalTile
   rotate: false
   xy: 782, 862
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 9
+  index: 70
 Unit/medievalUnit
   rotate: false
   xy: 912, 992
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 10
+  index: 1
 Unit/medievalUnit
   rotate: false
   xy: 1042, 1122
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 11
+  index: 2
 Unit/medievalUnit
   rotate: false
   xy: 1172, 1252
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 12
+  index: 3
 Unit/medievalUnit
   rotate: false
   xy: 1302, 1382
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 13
+  index: 4
 Unit/medievalUnit
   rotate: false
   xy: 1432, 1512
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 14
+  index: 5
 Unit/medievalUnit
   rotate: false
   xy: 1562, 1642
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 15
+  index: 6
 Unit/medievalUnit
   rotate: false
   xy: 1692, 1772
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 16
+  index: 7
 Unit/medievalUnit
   rotate: false
   xy: 1822, 1902
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 17
+  index: 8
 Unit/medievalUnit
   rotate: false
   xy: 132, 82
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 18
+  index: 9
 Unit/medievalUnit
   rotate: false
   xy: 262, 212
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 19
+  index: 10
 Unit/medievalUnit
   rotate: false
   xy: 392, 342
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 20
+  index: 11
 Unit/medievalUnit
   rotate: false
   xy: 522, 472
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 21
+  index: 12
 Unit/medievalUnit
   rotate: false
   xy: 652, 602
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 22
+  index: 13
 Unit/medievalUnit
   rotate: false
   xy: 782, 732
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
-  index: 23
+  index: 14
 Unit/medievalUnit
   rotate: false
   xy: 912, 862
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 15
+Unit/medievalUnit
+  rotate: false
+  xy: 1042, 992
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 16
+Unit/medievalUnit
+  rotate: false
+  xy: 1172, 1122
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 17
+Unit/medievalUnit
+  rotate: false
+  xy: 1302, 1252
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 18
+Unit/medievalUnit
+  rotate: false
+  xy: 1432, 1382
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 19
+Unit/medievalUnit
+  rotate: false
+  xy: 1562, 1512
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 20
+Unit/medievalUnit
+  rotate: false
+  xy: 1692, 1642
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 21
+Unit/medievalUnit
+  rotate: false
+  xy: 1822, 1772
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 22
+Unit/medievalUnit
+  rotate: false
+  xy: 262, 82
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: 23
+Unit/medievalUnit
+  rotate: false
+  xy: 392, 212
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
@@ -902,217 +965,231 @@ emotes/emote__
   index: -1
 emotes/emote_alert
   rotate: false
-  xy: 1042, 1082
+  xy: 1952, 1992
   size: 32, 38
   orig: 32, 38
   offset: 0, 0
   index: -1
 emotes/emote_anger
   rotate: false
-  xy: 1172, 1212
+  xy: 522, 432
   size: 32, 38
   orig: 32, 38
   offset: 0, 0
   index: -1
 emotes/emote_bars
   rotate: false
-  xy: 1302, 1342
+  xy: 652, 562
   size: 32, 38
   orig: 32, 38
   offset: 0, 0
   index: -1
 emotes/emote_cash
   rotate: false
-  xy: 1432, 1472
+  xy: 782, 692
   size: 32, 38
   orig: 32, 38
   offset: 0, 0
   index: -1
 emotes/emote_circle
   rotate: false
-  xy: 1562, 1602
+  xy: 912, 822
   size: 32, 38
   orig: 32, 38
   offset: 0, 0
   index: -1
 emotes/emote_cloud
   rotate: false
-  xy: 1692, 1732
+  xy: 1042, 952
   size: 32, 38
   orig: 32, 38
   offset: 0, 0
   index: -1
 emotes/emote_cross
   rotate: false
-  xy: 1822, 1862
+  xy: 1172, 1082
+  size: 32, 38
+  orig: 32, 38
+  offset: 0, 0
+  index: -1
+emotes/emote_cutting_tree
+  rotate: false
+  xy: 1302, 1212
   size: 32, 38
   orig: 32, 38
   offset: 0, 0
   index: -1
 emotes/emote_dots1
   rotate: false
-  xy: 1952, 1992
+  xy: 1432, 1342
   size: 32, 38
   orig: 32, 38
   offset: 0, 0
   index: -1
 emotes/emote_dots2
   rotate: false
-  xy: 262, 172
+  xy: 1562, 1472
   size: 32, 38
   orig: 32, 38
   offset: 0, 0
   index: -1
 emotes/emote_dots3
   rotate: false
-  xy: 392, 302
+  xy: 1692, 1602
   size: 32, 38
   orig: 32, 38
   offset: 0, 0
   index: -1
 emotes/emote_drop
   rotate: false
-  xy: 522, 432
+  xy: 1822, 1732
   size: 32, 38
   orig: 32, 38
   offset: 0, 0
   index: -1
 emotes/emote_drops
   rotate: false
-  xy: 652, 562
+  xy: 392, 172
   size: 32, 38
   orig: 32, 38
   offset: 0, 0
   index: -1
 emotes/emote_exclamation
   rotate: false
-  xy: 782, 692
+  xy: 2, 2
   size: 32, 38
   orig: 32, 38
   offset: 0, 0
   index: -1
 emotes/emote_exclamations
   rotate: false
-  xy: 912, 822
+  xy: 36, 42
   size: 32, 38
   orig: 32, 38
   offset: 0, 0
   index: -1
 emotes/emote_faceAngry
   rotate: false
-  xy: 2, 2
+  xy: 1952, 1952
   size: 32, 38
   orig: 32, 38
   offset: 0, 0
   index: -1
 emotes/emote_faceHappy
   rotate: false
-  xy: 36, 42
+  xy: 1986, 1992
   size: 32, 38
   orig: 32, 38
   offset: 0, 0
   index: -1
 emotes/emote_faceSad
   rotate: false
-  xy: 1042, 1042
+  xy: 522, 392
   size: 32, 38
   orig: 32, 38
   offset: 0, 0
   index: -1
 emotes/emote_heart
   rotate: false
-  xy: 1076, 1082
+  xy: 556, 432
   size: 32, 38
   orig: 32, 38
   offset: 0, 0
   index: -1
 emotes/emote_heartBroken
   rotate: false
-  xy: 1172, 1172
+  xy: 652, 522
   size: 32, 38
   orig: 32, 38
   offset: 0, 0
   index: -1
 emotes/emote_hearts
   rotate: false
-  xy: 1206, 1212
+  xy: 686, 562
   size: 32, 38
   orig: 32, 38
   offset: 0, 0
   index: -1
 emotes/emote_hunger
   rotate: false
-  xy: 1302, 1302
+  xy: 782, 652
   size: 32, 38
   orig: 32, 38
   offset: 0, 0
   index: -1
 emotes/emote_idea
   rotate: false
-  xy: 1336, 1342
+  xy: 816, 692
   size: 32, 38
   orig: 32, 38
   offset: 0, 0
   index: -1
 emotes/emote_laugh
   rotate: false
-  xy: 1432, 1432
+  xy: 912, 782
   size: 32, 38
   orig: 32, 38
   offset: 0, 0
   index: -1
 emotes/emote_music
   rotate: false
-  xy: 1466, 1472
+  xy: 946, 822
   size: 32, 38
   orig: 32, 38
   offset: 0, 0
   index: -1
 emotes/emote_pathfollow
   rotate: false
-  xy: 1562, 1562
+  xy: 1042, 912
+  size: 32, 38
+  orig: 32, 38
+  offset: 0, 0
+  index: -1
+emotes/emote_planting_tree
+  rotate: false
+  xy: 1076, 952
   size: 32, 38
   orig: 32, 38
   offset: 0, 0
   index: -1
 emotes/emote_question
   rotate: false
-  xy: 1596, 1602
+  xy: 1172, 1042
   size: 32, 38
   orig: 32, 38
   offset: 0, 0
   index: -1
 emotes/emote_sleep
   rotate: false
-  xy: 1692, 1692
+  xy: 1206, 1082
   size: 32, 38
   orig: 32, 38
   offset: 0, 0
   index: -1
 emotes/emote_sleeps
   rotate: false
-  xy: 1726, 1732
+  xy: 1302, 1172
   size: 32, 38
   orig: 32, 38
   offset: 0, 0
   index: -1
 emotes/emote_star
   rotate: false
-  xy: 1822, 1822
+  xy: 1336, 1212
   size: 32, 38
   orig: 32, 38
   offset: 0, 0
   index: -1
 emotes/emote_stars
   rotate: false
-  xy: 1856, 1862
+  xy: 1432, 1302
   size: 32, 38
   orig: 32, 38
   offset: 0, 0
   index: -1
 emotes/emote_swirl
   rotate: false
-  xy: 1952, 1952
+  xy: 1466, 1342
   size: 32, 38
   orig: 32, 38
   offset: 0, 0

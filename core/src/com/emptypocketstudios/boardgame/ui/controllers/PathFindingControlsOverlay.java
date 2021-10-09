@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.emptypocketstudios.boardgame.engine.Engine;
 import com.emptypocketstudios.boardgame.engine.entity.Entity;
-import com.emptypocketstudios.boardgame.engine.entity.components.PathFollowComponent;
+import com.emptypocketstudios.boardgame.engine.entity.components.movement.PathFollowComponent;
 import com.emptypocketstudios.boardgame.engine.world.Cell;
 import com.emptypocketstudios.boardgame.ui.EngineControllerManager;
 

@@ -9,6 +9,7 @@ import com.emptypocketstudios.boardgame.engine.world.Cell;
 public class PathFindingResponse extends Message implements Pool.Poolable {
     public long pathCreationTime = 0;
     public Array<Cell> path = new Array<>(1024);
+
     public PathFindingResultEnum regionSearchResult = PathFindingResultEnum.NOT_FOUND;
     public PathFindingResultEnum cellSearchResult = PathFindingResultEnum.NOT_FOUND;
 
@@ -29,5 +30,19 @@ public class PathFindingResponse extends Message implements Pool.Poolable {
         path.clear();
         regionSearchResult = PathFindingResultEnum.NOT_FOUND;
         cellSearchResult = PathFindingResultEnum.NOT_FOUND;
+    }
+
+    @Override
+    public String toString() {
+        return "PathFindingResponse{" +
+                "pathCreationTime=" + pathCreationTime +
+                ", path=" + path.toString(",") +
+                ", regionSearchResult=" + regionSearchResult +
+                ", cellSearchResult=" + cellSearchResult +
+                ", diagonal=" + diagonal +
+                ", debug=" + debug +
+                ", distCheckFast=" + distCheckFast +
+                ", priority=" + priority +
+                '}';
     }
 }

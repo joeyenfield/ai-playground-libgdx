@@ -6,7 +6,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.emptypocketstudios.boardgame.engine.Engine;
 import com.emptypocketstudios.boardgame.engine.entity.Entity;
-import com.emptypocketstudios.boardgame.engine.entity.components.PathFollowComponent;
+import com.emptypocketstudios.boardgame.engine.entity.components.movement.PathFollowComponent;
 import com.emptypocketstudios.boardgame.engine.pathfinding.PathFinder;
 import com.emptypocketstudios.boardgame.engine.pathfinding.cells.CellLink;
 import com.emptypocketstudios.boardgame.engine.world.Cell;
@@ -21,13 +21,13 @@ public class PathFindingRenderer {
     float lineSize;
     TextureAtlas atlas;
     ShapeRenderUtilDrawer util;
-    CellRenderer cellRenderer;
+    CellTextureRenderer cellRenderer;
 
     public PathFindingRenderer(TextureAtlas atlas, ShapeDrawer drawer) {
         this.drawer = drawer;
         this.atlas = atlas;
         util = new ShapeRenderUtilDrawer();
-        cellRenderer = new CellRenderer(atlas, drawer);
+        cellRenderer = new CellTextureRenderer(atlas, drawer);
     }
 
     public void update(Rectangle viewportBounds, float lineSize) {
@@ -41,7 +41,7 @@ public class PathFindingRenderer {
     }
 
     public void debugPathFinder(Engine engine, PathFinder pathFinder) {
-        if (!pathFinder.graphFinder.debug) {
+        if (!pathFinder.debug) {
             return;
         }
         for (CellLink link : pathFinder.graphFinder.usedPath) {
@@ -108,25 +108,27 @@ public class PathFindingRenderer {
     public void render(Engine engine) {
         Cell selectedCell = engine.engineControllerManager.pathfindingControls.selectedCell;
         if (selectedCell != null) {
-            cellRenderer.renderCell(engine, selectedCell);
+            cellRenderer.renderDebugCell(engine, selectedCell);
         }
         Entity selectedEntity = engine.engineControllerManager.pathfindingControls.selectedEntity;
         if (selectedEntity != null) {
             PathFollowComponent component = selectedEntity.getEntityComponent(PathFollowComponent.class);
-            Array<Cell> cells =component.path;
-            for (int i = component.currentIndex; i < cells.size; i++) {
-                cellRenderer.renderCell(engine, cells.get(i));
-            }
+            if (component != null && component.path != null) {
+                Array<Cell> cells = component.path;
+                for (int i = component.currentIndex; i < cells.size; i++) {
+                    cellRenderer.renderDebugCell(engine, cells.get(i));
+                }
 
-            for (int i = component.currentIndex; i < cells.size - 1; i++) {
-                Cell c1 = cells.get(i);
-                Cell c2 = cells.get(i + 1);
-                cellRenderer.drawLineCells(c1, c2, Color.PURPLE, 2);
-            }
+                for (int i = component.currentIndex; i < cells.size - 1; i++) {
+                    Cell c1 = cells.get(i);
+                    Cell c2 = cells.get(i + 1);
+                    cellRenderer.drawLineCells(c1, c2, Color.PURPLE, 2);
+                }
 
-            PathFinder finder = component.debugPathFinder;
-            if (finder != null) {
-                debugPathFinder(engine,finder);
+                PathFinder finder = component.debugPathFinder;
+                if (finder != null) {
+                    debugPathFinder(engine, finder);
+                }
             }
         }
     }

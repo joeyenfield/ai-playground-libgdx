@@ -2,12 +2,10 @@ package com.emptypocketstudios.boardgame.engine.pathfinding.cells;
 
 import com.badlogic.gdx.ai.msg.PriorityQueue;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ArrayMap;
 import com.badlogic.gdx.utils.Pools;
 import com.emptypocketstudios.boardgame.engine.world.Cell;
-import com.emptypocketstudios.boardgame.engine.world.CellTypes;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,7 +17,7 @@ public class CellPathFinder {
     public PriorityQueue<CellLink> openPaths = new PriorityQueue<CellLink>();
 
     //Tracks the best path to a NODE to allow a node to be re-opened if a better path is found
-    public Map<Cell, CellLink> bestPaths = new HashMap<>();
+    public ArrayMap<Cell, CellLink> bestPaths = new ArrayMap<>();
 
     public float searchTime = 0;
     public float cleanupTime = 0;
@@ -68,7 +66,7 @@ public class CellPathFinder {
                 if (dx != 0 && dy != 0) {
                     Cell nextCell = currentCell.links[dx][dy];
                     //Make sure cell not blocked
-                    if (!CellTypes.isBlocked(nextCell.type)) {
+                    if (!nextCell.type.blocked) {
                         CellLink nextPath = getPath(currentPath, currentCell, nextCell);
                         //If at target break out
                         if (nextCell == targetCell) {

@@ -1,11 +1,18 @@
 package com.emptypocketstudios.boardgame.engine.world;
 
 import com.badlogic.gdx.math.GridPoint2;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Pools;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ArrayMap;
 import com.emptypocketstudios.boardgame.engine.Engine;
 import com.emptypocketstudios.boardgame.engine.entity.Entity;
+import com.emptypocketstudios.boardgame.engine.world.processors.WorldCellSearch;
+import com.emptypocketstudios.boardgame.engine.world.processors.WorldEntitySearch;
+import com.emptypocketstudios.boardgame.engine.world.processors.WorldLoadingProcessor;
+import com.emptypocketstudios.boardgame.engine.world.processors.WorldRegionLinkProcessor;
+import com.emptypocketstudios.boardgame.library.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,9 +23,23 @@ public class World {
     public int chunksY;
     public int cellsPerChunkX;
     public int cellsPerChunkY;
+
+    public float cellSizeX;
+    public float cellSizeY;
+
     public Rectangle boundary = new Rectangle();
     public WorldChunk[][] chunks;
+
+    public ArrayMap<RegionNode, Array<RegionNode>> regionLinks = new ArrayMap<>();
+    public ArrayMap<RegionNode, Array<RegionNode>> diagonalRegionLinks = new ArrayMap<>();
+
     public Map<String, Entity> namedEntities = new HashMap<>();
+
+    public WorldCellSearch cellSearcher;
+    public WorldEntitySearch entitySearcher;
+
+    public WorldRegionLinkProcessor worldRegionLinkProcessor;
+    public WorldLoadingProcessor worldLoadingProcessor;
 
     public World(Rectangle boundary, int chunksX, int chunksY, int cellsPerChunkX, int cellsPerChunkY) {
         this.chunksX = chunksX;
@@ -27,43 +48,62 @@ public class World {
         this.cellsPerChunkY = cellsPerChunkY;
         this.boundary.set(boundary);
         this.chunks = new WorldChunk[chunksX][chunksY];
-    }
-
-    public void loadAllChunks() {
-        for (int x = 0; x < chunksX; x++) {
-            for (int y = 0; y < chunksY; y++) {
-                loadChunk(x, y);
-            }
-        }
+        this.cellSizeX = this.boundary.width / (this.chunksX * this.cellsPerChunkX);
+        this.cellSizeY = this.boundary.height / (this.chunksY * this.cellsPerChunkY);
+        this.cellSearcher = new WorldCellSearch(this);
+        this.entitySearcher = new WorldEntitySearch(this);
+        this.worldLoadingProcessor = new WorldLoadingProcessor(this);
+        this.worldRegionLinkProcessor = new WorldRegionLinkProcessor(this);
     }
 
     public void addEntity(Entity e) {
         e.world = this;
         namedEntities.put(e.name, e);
         engine.postOffice.register(e.name, e);
-        WorldChunk chunk = getChunkByWorldPosition(e.pos);
+        WorldChunk chunk = getChunkAtWorldPosition(e.pos);
         if (chunk != null) {
             chunk.addEntity(e);
         }
     }
 
+    public WorldChunk getChunkAtWorldPosition(Vector2 pos) {
+        return getChunkAtWorldPosition(pos.x, pos.y, false);
+    }
 
-    public WorldChunk getChunkByWorldPosition(Vector2 pos) {
-        if (boundary.contains(pos)) {
-            int x = (int) (((pos.x - boundary.x) / boundary.width) * chunksX);
-            int y = (int) (((pos.y - boundary.y) / boundary.height) * chunksY);
-            return getChunkByChunkId(x, y);
+    public WorldChunk getChunkAtWorldPosition(float x, float y) {
+        return getChunkAtWorldPosition(x, y, false);
+    }
+
+    public WorldChunk getChunkAtWorldPosition(float x, float y, boolean bounded) {
+        float dx = (x - boundary.x) / boundary.width;
+        float dy = (y - boundary.y) / boundary.height;
+        int xId = (int) MathUtils.floor(dx * (chunksX));
+        int yId = (int) MathUtils.floor(dy * (chunksY));
+        if (bounded) {
+            xId = MathUtils.clamp(xId, 0, chunksX - 1);
+            yId = MathUtils.clamp(yId, 0, chunksY - 1);
         }
-        return null;
+        return getChunkByChunkId(xId, yId);
+
+    }
+
+    public void getClosestGridPos(Vector2 pos, GridPoint2 point) {
+        point.x = (int) (MathUtils.clamp((pos.x - boundary.x) / boundary.width, 0f, 1f) * chunksX * cellsPerChunkX);
+        point.y = (int) (MathUtils.clamp((pos.y - boundary.y) / boundary.height, 0f, 1f) * chunksY * cellsPerChunkY);
     }
 
     public Cell getCellAtWorldPosition(Vector2 pos) {
-        if (boundary.contains(pos)) {
-            int x = (int) (((pos.x - boundary.x) / boundary.width) * chunksX * cellsPerChunkX);
-            int y = (int) (((pos.y - boundary.y) / boundary.height) * chunksY * cellsPerChunkY);
-            return getCellByCellId(x, y);
+        return getCellAtWorldPosition(pos.x, pos.y, false);
+    }
+
+    public Cell getCellAtWorldPosition(float x, float y, boolean bounded) {
+        int cX = (int) (((x - boundary.x) / boundary.width) * chunksX * cellsPerChunkX);
+        int cY = (int) (((y - boundary.y) / boundary.height) * chunksY * cellsPerChunkY);
+        if (bounded) {
+            cX = MathUtils.clamp(cX, 0, chunksX * cellsPerChunkX - 1);
+            cY = MathUtils.clamp(cY, 0, chunksY * cellsPerChunkY - 1);
         }
-        return null;
+        return getCellByCellId(cX, cY);
     }
 
     public Cell getCellByCellId(int x, int y) {
@@ -88,140 +128,6 @@ public class World {
         return chunks[x][y];
     }
 
-    public void loadChunk(int x, int y) {
-        if (x < 0 || y < 0 || x >= chunksX || y >= chunksY) {
-            return;
-        }
-        Rectangle subRegion = Pools.obtain(Rectangle.class);
-        subRegion.width = boundary.width / chunksX;
-        subRegion.height = boundary.height / chunksY;
-        subRegion.x = boundary.x + subRegion.width * x;
-        subRegion.y = boundary.y + subRegion.height * y;
-
-        WorldChunk chunk = Pools.obtain(WorldChunk.class);
-        chunk.init(this, subRegion, x, y, cellsPerChunkX, cellsPerChunkY);
-        chunk.setupInternalLinks();
-        chunks[x][y] = chunk;
-        linkChunk(x, y);
-
-    }
-
-    public void linkChunk(int chunkX, int chunkY) {
-        WorldChunk currentChunk = getChunkByChunkId(chunkX, chunkY);
-        if (currentChunk == null) {
-            return;
-        }
-
-        WorldChunk chunk;
-        Cell currentCell = null;
-        int dx = 0;
-        int dy = 0;
-
-        //Link Down Left
-        currentCell = currentChunk.getCellByIndex(0, 0);
-        dx = -1;
-        dy = -1;
-        currentCell.link(dx, dy, getCellByOffset(currentCell, dx, dy));
-
-        // Link Up Right
-        currentCell = currentChunk.getCellByIndex(currentChunk.numCellsX - 1, currentChunk.numCellsY - 1);
-        dx = +1;
-        dy = +1;
-        currentCell.link(dx, dy, getCellByOffset(currentCell, dx, dy));
-
-        //Link Down Right
-        currentCell = currentChunk.getCellByIndex(currentChunk.numCellsX - 1, 0);
-        dx = +1;
-        dy = -1;
-        currentCell.link(dx, dy, getCellByOffset(currentCell, dx, dy));
-
-        // Link Up Left
-        currentCell = currentChunk.getCellByIndex(0, currentChunk.numCellsY - 1);
-        dx = -1;
-        dy = +1;
-        currentCell.link(dx, dy, getCellByOffset(currentCell, dx, dy));
-
-
-        //Link Up
-        chunk = getChunkByChunkId(chunkX, chunkY + 1);
-        if (chunk != null) {
-            for (int x = 0; x < currentChunk.numCellsX; x++) {
-                currentCell = currentChunk.getCellByIndex(x, currentChunk.numCellsY - 1);
-
-                dy = +1;
-                dx = -1;
-                currentCell.link(dx, dy, chunk.getCellByCellId(currentCell.cellId.x + dx, currentCell.cellId.y + dy));
-                dx = 0;
-                currentCell.link(dx, dy, chunk.getCellByCellId(currentCell.cellId.x + dx, currentCell.cellId.y + dy));
-                dx = 1;
-                currentCell.link(dx, dy, chunk.getCellByCellId(currentCell.cellId.x + dx, currentCell.cellId.y + dy));
-            }
-        }
-
-        //Link Down
-        chunk = getChunkByChunkId(chunkX, chunkY - 1);
-        if (chunk != null) {
-            for (int x = 0; x < currentChunk.numCellsX; x++) {
-                currentCell = currentChunk.getCellByIndex(x, 0);
-                dy = -1;
-                dx = -1;
-                currentCell.link(dx, dy, chunk.getCellByCellId(currentCell.cellId.x + dx, currentCell.cellId.y + dy));
-                dx = 0;
-                currentCell.link(dx, dy, chunk.getCellByCellId(currentCell.cellId.x + dx, currentCell.cellId.y + dy));
-                dx = 1;
-                currentCell.link(dx, dy, chunk.getCellByCellId(currentCell.cellId.x + dx, currentCell.cellId.y + dy));
-            }
-        }
-
-        //Link Left
-        chunk = getChunkByChunkId(chunkX - 1, chunkY);
-        if (chunk != null) {
-            for (int y = 0; y < currentChunk.numCellsY; y++) {
-                currentCell = currentChunk.getCellByIndex(0, y);
-
-                dx = -1;
-                dy = -1;
-                currentCell.link(dx, dy, chunk.getCellByCellId(currentCell.cellId.x + dx, currentCell.cellId.y + dy));
-                dy = 0;
-                currentCell.link(dx, dy, chunk.getCellByCellId(currentCell.cellId.x + dx, currentCell.cellId.y + dy));
-                dy = 1;
-                currentCell.link(dx, dy, chunk.getCellByCellId(currentCell.cellId.x + dx, currentCell.cellId.y + dy));
-            }
-        }
-
-        //Link Right
-        chunk = getChunkByChunkId(chunkX + 1, chunkY);
-        if (chunk != null) {
-            for (int y = 0; y < currentChunk.numCellsY; y++) {
-                currentCell = currentChunk.getCellByIndex(currentChunk.numCellsX - 1, y);
-
-                dx = 1;
-                dy = -1;
-                currentCell.link(dx, dy, chunk.getCellByCellId(currentCell.cellId.x + dx, currentCell.cellId.y + dy));
-                dy = 0;
-                currentCell.link(dx, dy, chunk.getCellByCellId(currentCell.cellId.x + dx, currentCell.cellId.y + dy));
-                dy = 1;
-                currentCell.link(dx, dy, chunk.getCellByCellId(currentCell.cellId.x + dx, currentCell.cellId.y + dy));
-            }
-        }
-    }
-
-    public boolean isChunkLoaded(int x, int y) {
-        if (x < 0 || y < 0 || x >= chunksX || y >= chunksY) {
-            return false;
-        }
-        return getChunkByChunkId(x, y) == null;
-    }
-
-    public void unloadChunk(int x, int y) {
-        if (x < 0 || y < 0 || x >= chunksX || y >= chunksY) {
-            return;
-        }
-        WorldChunk chunk = chunks[x][y];
-        chunks[x][y] = null;
-        Pools.free(chunk);
-    }
-
     public WorldChunk getChunkByChunkId(GridPoint2 chunkId) {
         return getChunkByChunkId(chunkId.x, chunkId.y);
     }
@@ -229,7 +135,6 @@ public class World {
     public void update(float delta) {
         // Update each cell
         boolean regionUpdatedRequired = false;
-        boolean regionLinkUpdatedRequired = false;
         for (int x = 0; x < chunksX; x++) {
             for (int y = 0; y < chunksY; y++) {
                 WorldChunk chunk = chunks[x][y];
@@ -247,28 +152,17 @@ public class World {
                     if (chunk != null) {
                         chunk.updateRegions();
                         //Update Linked Nodes that regions need update
-                        regionLinkUpdatedRequired = regionLinkUpdatedRequired || chunk.updateRegionLinksRequired;
                     }
                 }
             }
+            this.worldRegionLinkProcessor.run();
         }
-
-        if (regionLinkUpdatedRequired) {
-            for (int x = 0; x < chunksX; x++) {
-                for (int y = 0; y < chunksY; y++) {
-                    WorldChunk chunk = chunks[x][y];
-                    if (chunk != null) {
-                        chunk.updateRegionLinks();
-                    }
-                }
-            }
-        }
-
 
     }
 
     public Entity getEntityByName(String entityName) {
-        return namedEntities.get(entityName);
+        Entity entity = namedEntities.get(entityName);
+        return entity;
     }
 
     public Entity getEntityByPos(Vector2 pos) {
@@ -288,7 +182,7 @@ public class World {
         return bestEntity;
     }
 
-    public void fillAllCells(short type) {
+    public void fillAllCells(CellType type) {
         for (int x = 0; x < chunksX; x++) {
             for (int y = 0; y < chunksY; y++) {
                 WorldChunk chunk = chunks[x][y];
@@ -297,5 +191,68 @@ public class World {
                 }
             }
         }
+    }
+
+    public void loadAllChunks() {
+        worldLoadingProcessor.loadAllChunks();
+    }
+
+    public void setEngine(Engine engine) {
+        this.engine = engine;
+    }
+
+    public void fillAllCells(Rectangle bounds, CellType type, boolean road) {
+        GridPoint2 p1 = getCellAtWorldPosition(bounds.x, bounds.y, true).cellId;
+        GridPoint2 p2 = getCellAtWorldPosition(bounds.x + bounds.width, bounds.y + bounds.height, true).cellId;
+
+        for (int x = p1.x; x <= p2.x; x++) {
+            for (int y = p1.y; y <= p2.y; y++) {
+                getCellByCellId(x, y).setType(type, 0, road);
+            }
+        }
+    }
+
+    public void printRegions() {
+        StringBuilder out = new StringBuilder();
+        for (int y = 0; y < getCellsY(); y++) {
+            for (int x = 0; x < getCellsX(); x++) {
+                if (x != 0) {
+                    out.append(",");
+                }
+                out.append(getCellByCellId(x, y).region.regionId);
+            }
+            out.append("\n");
+        }
+        System.out.println(out.toString());
+    }
+
+    public void printCellType() {
+        StringBuilder out = new StringBuilder();
+        for (int y = 0; y < getCellsY(); y++) {
+            for (int x = 0; x < getCellsX(); x++) {
+                if (x != 0) {
+                    out.append(",");
+                }
+                out.append(StringUtils.leftPad(getCellByCellId(x, y).type.name(), 8, ' '));
+            }
+            out.append("\n");
+        }
+        System.out.println(out.toString());
+    }
+
+    public int getCellsX() {
+        return chunksX * cellsPerChunkX;
+    }
+
+    public int getCellsY() {
+        return chunksY * cellsPerChunkY;
+    }
+
+    public int getChunksX() {
+        return chunksX;
+    }
+
+    public int getChunksY() {
+        return chunksY;
     }
 }

@@ -10,6 +10,7 @@ import com.emptypocketstudios.boardgame.library.screens.SplashScreen;
 import com.emptypocketstudios.boardgame.library.ui.GameScreen;
 import com.emptypocketstudios.boardgame.library.ui.Scene2DToolkit;
 import com.emptypocketstudios.boardgame.ui.GameEngineScreen;
+import com.kotcrab.vis.ui.VisUI;
 
 public class MainGame extends Game implements InputProcessor {
     protected AssetManager assetManager;
@@ -20,6 +21,7 @@ public class MainGame extends Game implements InputProcessor {
 
     @Override
     public void create() {
+        VisUI.load();
         Scene2DToolkit.getToolkit().reloadSkin();
         input = new NamedInputMultiplexer();
         Gdx.input.setInputProcessor(input);
@@ -27,7 +29,9 @@ public class MainGame extends Game implements InputProcessor {
         assetManager = new AssetManager();
         loadingScreen = new LoadingScreen(this, input);
         splashScreen = new SplashScreen(this, input);
+
         loadScreen(new GameEngineScreen(this, input), false);
+//        loadScreen(new OpenSimplexScreen(this, input), false);
     }
 
     public void loadScreen(GameScreen gameScreen, boolean proceededOnLood) {
@@ -50,6 +54,7 @@ public class MainGame extends Game implements InputProcessor {
         }
         screen = null;
         Scene2DToolkit.getToolkit().disposeSkin();
+        VisUI.dispose();
     }
 
     @Override

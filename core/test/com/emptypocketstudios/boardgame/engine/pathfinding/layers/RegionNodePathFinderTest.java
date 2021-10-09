@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.emptypocketstudios.boardgame.engine.pathfinding.PathFindingResultEnum;
 import com.emptypocketstudios.boardgame.engine.world.Cell;
-import com.emptypocketstudios.boardgame.engine.world.CellTypes;
+import com.emptypocketstudios.boardgame.engine.world.CellType;
 import com.emptypocketstudios.boardgame.engine.world.RegionNode;
 import com.emptypocketstudios.boardgame.engine.world.World;
 import com.emptypocketstudios.boardgame.engine.world.WorldChunk;
@@ -16,15 +16,26 @@ import org.junit.Test;
 public class RegionNodePathFinderTest extends TestCase {
 
     World world;
-    RegionNodePathFinder pathFinder;
+    RegionNodePathFinderLegacy pathFinder;
 
     public void setUp() throws Exception {
         super.setUp();
-        pathFinder = new RegionNodePathFinder();
+        pathFinder = new RegionNodePathFinderLegacy();
         Rectangle region = new Rectangle(0, 0, 100, 100);
         world = new World(region, 10, 10, 10, 10);
         world.loadAllChunks();
         world.update(1);
+    }
+
+    @Test
+    public void testSameCell() {
+        Array<RegionNode> path = new Array<>();
+        Cell start = world.getCellByCellId(1, 1);
+        Cell end = world.getCellByCellId(1, 1);
+        pathFinder.search(world, start, end, path, 9999,false);
+        assertEquals(1, path.size);
+        assertEquals(0, path.get(0).chunkId.x);
+        assertEquals(0, path.get(0).chunkId.y);
     }
 
     @Test
@@ -110,7 +121,7 @@ public class RegionNodePathFinderTest extends TestCase {
         //Block off left side
         WorldChunk chunk = world.getChunkByChunkId(end.region.chunkId);
         for (int y = 0; y < chunk.numCellsY; y++) {
-            chunk.cells[0][y].type = CellTypes.ROCK;
+            chunk.cells[0][y].type = CellType.WATER;
         }
         chunk.updateRegions();
 

@@ -8,15 +8,19 @@ import java.util.Objects;
 public class RegionNode implements Disposable {
     public GridPoint2 chunkId = new GridPoint2();
     public int regionId = 0;
+    public float regionWalkWeight = 0;
 
     public void set(Cell c) {
         set(c.region);
     }
 
-    public void set(RegionNode c) {
+    public RegionNode set(RegionNode c) {
         chunkId.set(c.chunkId);
         regionId = c.regionId;
+        regionWalkWeight = c.regionWalkWeight;
+        return this;
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -45,18 +49,19 @@ public class RegionNode implements Disposable {
     }
 
     public boolean contains(Cell c) {
-        if(c == null)return false;
+        if (c == null) return false;
         return this.equals(c.region);
     }
 
     public float dst2(RegionNode current) {
-        float dx = current.chunkId.x-chunkId.x;
-        float dy = current.chunkId.y-chunkId.y;
-        return dx*dx+dy*dy;
+        float dx = current.chunkId.x - chunkId.x;
+        float dy = current.chunkId.y - chunkId.y;
+        return dx * dx + dy * dy;
     }
 
     @Override
     public void dispose() {
-        chunkId.set(0,0);
+        chunkId.set(0, 0);
+        regionWalkWeight = 1f;
     }
 }

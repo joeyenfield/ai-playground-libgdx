@@ -1,7 +1,5 @@
 package com.emptypocketstudios.boardgame.engine.world;
 
-import com.emptypocketstudios.boardgame.engine.pathfinding.layers.RegionLinks;
-
 public class WorldChunkRegionNodeLink {
     public RegionNode source = new RegionNode();
     public RegionNode current = new RegionNode();
@@ -11,7 +9,8 @@ public class WorldChunkRegionNodeLink {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         WorldChunkRegionNodeLink that = (WorldChunkRegionNodeLink) o;
-        return source.equals(that.source) && current.equals(that.current);
+        return (source.equals(that.source) && current.equals(that.current))
+                || (source.equals(that.current) && current.equals(that.source)) ;
     }
 
     @Override

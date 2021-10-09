@@ -22,8 +22,8 @@ public class DesktopLauncher {
         TexturePacker.process(settings, "artwork/HD", "android/assets/art", "game");
 
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.width = 800;
-        config.height = 600;
+        config.width = 1280;
+        config.height = 720;
         config.x = 0;
         config.y = 0;
         config.foregroundFPS = 60;
