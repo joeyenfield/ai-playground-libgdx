@@ -21,19 +21,19 @@ public class PathFindingRenderer {
     float lineSize;
     TextureAtlas atlas;
     ShapeRenderUtilDrawer util;
-    CellTextureRenderer cellRenderer;
+    CellDebugRenderer cellDebugRenderer;
 
     public PathFindingRenderer(TextureAtlas atlas, ShapeDrawer drawer) {
         this.drawer = drawer;
         this.atlas = atlas;
         util = new ShapeRenderUtilDrawer();
-        cellRenderer = new CellTextureRenderer(atlas, drawer);
+        cellDebugRenderer = new CellDebugRenderer(drawer);
     }
 
     public void update(Rectangle viewportBounds, float lineSize) {
         this.viewportBounds.set(viewportBounds);
         this.lineSize = lineSize;
-        cellRenderer.update(viewportBounds, lineSize);
+        cellDebugRenderer.update(viewportBounds, lineSize);
     }
 
     public Color getCellColor(Cell c) {
@@ -108,7 +108,7 @@ public class PathFindingRenderer {
     public void render(Engine engine) {
         Cell selectedCell = engine.engineControllerManager.pathfindingControls.selectedCell;
         if (selectedCell != null) {
-            cellRenderer.renderDebugCell(engine, selectedCell);
+            cellDebugRenderer.drawCellBoundary(engine, selectedCell);
         }
         Entity selectedEntity = engine.engineControllerManager.pathfindingControls.selectedEntity;
         if (selectedEntity != null) {
@@ -116,16 +116,16 @@ public class PathFindingRenderer {
             if (component != null && component.path != null) {
                 Array<Cell> cells = component.path;
                 for (int i = component.currentIndex; i < cells.size; i++) {
-                    cellRenderer.renderDebugCell(engine, cells.get(i));
+                    cellDebugRenderer.drawCellBoundary(engine, cells.get(i));
                 }
 
                 for (int i = component.currentIndex; i < cells.size - 1; i++) {
                     Cell c1 = cells.get(i);
                     Cell c2 = cells.get(i + 1);
-                    cellRenderer.drawLineCells(c1, c2, Color.PURPLE, 2);
+                    cellDebugRenderer.drawLineCells(c1, c2, Color.PURPLE, 2);
                 }
 
-                PathFinder finder = component.debugPathFinder;
+                PathFinder finder = component.getDebugPathFinder();
                 if (finder != null) {
                     debugPathFinder(engine, finder);
                 }

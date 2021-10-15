@@ -3,7 +3,7 @@ BTREE name:get_drink
     LOG name:Get Drink, message:"Im getting a drink"
 
     ANY name:Search Water
-      CELL_SEARCH name:Search Water, range:5000, type:SHALLOW_WATER, searchType:NEAR_SPIRAL, memory:WATER_TARGET
+      CELL_SEARCH name:Search Water, range:30, type:SHALLOW_WATER, searchType:NEAR_SPIRAL, memory:WATER_TARGET
       LOG name:Search Water, message:"I cant find any water", forcedResult:FAILURE
     LOG name:Search Water, message:"I found water, planning path!"
 

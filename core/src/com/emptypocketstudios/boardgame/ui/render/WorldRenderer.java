@@ -12,10 +12,10 @@ import space.earlygrey.shapedrawer.ShapeDrawer;
 
 public class WorldRenderer {
     public boolean drawWorldBounds = true;
+
+    public WorldChunkRenderer worldChunkRenderer;
+
     ShapeDrawer drawer;
-
-    WorldChunkRenderer worldChunkRenderer;
-
     TextureAtlas atlas;
     Rectangle viewportBounds = new Rectangle();
     float lineSize;

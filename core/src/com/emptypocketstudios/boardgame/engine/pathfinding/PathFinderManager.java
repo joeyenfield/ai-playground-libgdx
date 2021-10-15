@@ -48,18 +48,16 @@ public class PathFinderManager implements MessageProcessor<Message> {
             request.attempts--;
             //Identify if should use global finder or a new one ( for debugging )
             PathFinder finder = null;
-            if (request.debug) {
-                Entity entity = engine.getEntityByName(request.source);
-                PathFollowComponent pathFollow = entity.getEntityComponent(PathFollowComponent.class);
-                if (pathFollow.debugPathFinder == null) {
-                    pathFollow.debugPathFinder = new PathFinder(engine);
+            Entity entity = engine.getEntityByName(request.source);
+            PathFollowComponent pathFollow = entity.getEntityComponent(PathFollowComponent.class);
+            if (request.isDebug()) {
+                if (pathFollow.getDebugPathFinder() == null) {
+                    pathFollow.setDebugPathFinder(new PathFinder(engine));
                 }
-                finder = pathFollow.debugPathFinder;
+                finder = pathFollow.getDebugPathFinder();
             } else {
-                Entity entity = engine.getEntityByName(request.source);
-                PathFollowComponent pathFollow = entity.getEntityComponent(PathFollowComponent.class);
-                if (pathFollow.debugPathFinder != null) {
-                    pathFollow.debugPathFinder = null;
+                if (pathFollow.getDebugPathFinder() != null) {
+                    pathFollow.setDebugPathFinder(null);
                 }
             }
             if (finder == null) {

@@ -68,8 +68,8 @@ public class RegionNodePathFinderNGTest extends TestCase {
         assertEquals(5, world.getChunkByChunkId(1, 2).getRegions().size);
         assertEquals(5, world.getChunkByChunkId(2, 2).getRegions().size);
 
-        assertEquals(45, world.regionLinks.size);
-        assertEquals(45, world.diagonalRegionLinks.size);
+        assertEquals(45, world.regionLinks.size());
+        assertEquals(45, world.diagonalRegionLinks.size());
         world.printRegions();
         world.printCellType();
     }
@@ -79,8 +79,8 @@ public class RegionNodePathFinderNGTest extends TestCase {
         world.fillAllCells(CellType.GRASS);
         world.update(1);
 
-        assertEquals(9, world.regionLinks.size);
-        assertEquals(9, world.diagonalRegionLinks.size);
+        assertEquals(9, world.regionLinks.size());
+        assertEquals(9, world.diagonalRegionLinks.size());
 
         Cell startCell = world.getChunkByChunkId(0, 0).getCellByCellId(0, 0);
         Cell endCell = world.getChunkByChunkId(0, 0).getCellByCellId(0, 0);
@@ -96,8 +96,8 @@ public class RegionNodePathFinderNGTest extends TestCase {
         world.fillAllCells(CellType.GRASS);
         world.update(1);
 
-        assertEquals(9, world.regionLinks.size);
-        assertEquals(9, world.diagonalRegionLinks.size);
+        assertEquals(9, world.regionLinks.size());
+        assertEquals(9, world.diagonalRegionLinks.size());
 
         Cell startCell = world.getChunkByChunkId(0, 0).getCellByCellId(0, 0);
         Cell endCell = world.getChunkByChunkId(0, 0).getCellByCellId(0, 0);
@@ -113,8 +113,8 @@ public class RegionNodePathFinderNGTest extends TestCase {
         world.fillAllCells(CellType.GRASS);
         world.update(1);
 
-        assertEquals(9, world.regionLinks.size);
-        assertEquals(9, world.diagonalRegionLinks.size);
+        assertEquals(9, world.regionLinks.size());
+        assertEquals(9, world.diagonalRegionLinks.size());
 
         Cell cell;
         Array<RegionNode> nodes;

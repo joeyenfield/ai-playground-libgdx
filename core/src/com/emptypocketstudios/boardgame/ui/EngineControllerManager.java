@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.emptypocketstudios.boardgame.engine.Engine;
 import com.emptypocketstudios.boardgame.library.input.NamedInputMultiplexer;
 import com.emptypocketstudios.boardgame.library.ui.Scene2DToolkit;
+import com.emptypocketstudios.boardgame.ui.controllers.EngineRenderControlOverlay;
 import com.emptypocketstudios.boardgame.ui.controllers.MapDesignOverlay;
 import com.emptypocketstudios.boardgame.ui.controllers.PathFindingControlsOverlay;
 
@@ -17,6 +18,7 @@ public class EngineControllerManager extends Table {
 
     public PathFindingControlsOverlay pathfindingControls;
     public MapDesignOverlay mapDesignerOverlay;
+    public EngineRenderControlOverlay renderControls;
 
     public EngineControllerManager(Engine engine, Camera camera) {
         inputMultiplexer = new NamedInputMultiplexer();
@@ -24,11 +26,11 @@ public class EngineControllerManager extends Table {
         inputMultiplexer.addProcessor(new GestureDetector(pathfindingControls), "PathFinder-GST");
         inputMultiplexer.addProcessor(pathfindingControls, "PathFinder-CONT");
 
-
         mapDesignerOverlay = new MapDesignOverlay(this, engine, camera, Scene2DToolkit.skin());
         inputMultiplexer.addProcessor(new GestureDetector(mapDesignerOverlay), "MapDesign-GST");
         inputMultiplexer.addProcessor(mapDesignerOverlay, "MapDesign-CONT");
 
+        renderControls = new EngineRenderControlOverlay(this, engine, camera, Scene2DToolkit.skin());
         layoutGui();
     }
 
@@ -40,7 +42,7 @@ public class EngineControllerManager extends Table {
     public void resize(int width, int height) {
         innerLayout.clear();
         innerLayout.row();
-        innerLayout.add();
+        innerLayout.add(renderControls.getControlButton());
         innerLayout.add().fillX().expandX();
         innerLayout.add();
 
@@ -64,5 +66,6 @@ public class EngineControllerManager extends Table {
 
     public void updateLogic(float delta) {
 //        pathfindingControls.update(delta);
+        renderControls.update(delta);
     }
 }

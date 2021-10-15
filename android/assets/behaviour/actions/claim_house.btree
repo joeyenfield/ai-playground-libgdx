@@ -4,7 +4,7 @@ BTREE name:claim_house
     LOG name:Claim House, message:"Im getting a house"
 
     ANY name:Search House
-      ENTITY_SEARCH name:Search House, range:5000, searchType:NEAREST, tag:EMPTY_HOUSE, memory:MY_HOUSE_NAME
+      ENTITY_SEARCH name:Search House, range:20, searchType:NEAREST, tag:EMPTY_HOUSE, memory:MY_HOUSE_NAME
       LOG name:Search House, message:"I cant find any House", forcedResult:FAILURE
     LOG name:Search House, message:"I found House, planning path!"
 

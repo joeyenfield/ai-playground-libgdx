@@ -12,29 +12,35 @@ import space.earlygrey.shapedrawer.ShapeDrawer;
 
 public class WorldChunkRenderer {
 
-    public boolean drawAllChunks = false;
+    public boolean drawChunkBoundary = true;
+    public boolean drawCellBoundary = true;
+    public boolean drawCellDebugText = true;
+    public boolean drawCellTexture = true;
+    public boolean drawCellRegions = true;
+
+    public CellTextureRenderer cellTextureRenderer;
+    public CellDebugRenderer cellDebugRenderer;
+
     ShapeDrawer drawer;
     Rectangle viewportBounds = new Rectangle();
     float lineSize;
     TextureAtlas atlas;
-    CellTextureRenderer cellRenderer;
-    CellRegionRenderer cellRegionRenderer;
     EntityRenderer entityRenderer;
 
     public WorldChunkRenderer(TextureAtlas atlas, ShapeDrawer drawer) {
         this.drawer = drawer;
         this.atlas = atlas;
-        this.cellRenderer = new CellTextureRenderer(atlas, drawer);
-        this.cellRegionRenderer = new CellRegionRenderer(drawer);
+        this.cellTextureRenderer = new CellTextureRenderer(atlas, drawer);
+        this.cellDebugRenderer = new CellDebugRenderer(drawer);
         this.entityRenderer = new EntityRenderer(atlas, drawer);
     }
 
     public void update(Rectangle viewportBounds, float lineSize) {
         this.viewportBounds.set(viewportBounds);
         this.lineSize = lineSize;
-        this.cellRenderer.update(viewportBounds, lineSize);
+        this.cellTextureRenderer.update(viewportBounds, lineSize);
+        this.cellDebugRenderer.update(viewportBounds, lineSize);
         this.entityRenderer.update(viewportBounds, lineSize);
-        this.cellRegionRenderer.update(viewportBounds, lineSize);
     }
 
 
@@ -43,20 +49,29 @@ public class WorldChunkRenderer {
             return;
         }
 
-        if (drawAllChunks) {
+        if (drawChunkBoundary) {
             drawer.filledRectangle(chunk.boundary, Color.GREEN);
         }
 
         for (int cellX = 0; cellX < chunk.numCellsX; cellX++) {
             for (int cellY = 0; cellY < chunk.numCellsY; cellY++) {
-                cellRenderer.textureCell(engine, chunk.getCellByIndex(cellX, cellY));
 
-//                cellRenderer.renderDebugCell(engine, chunk.getCellByIndex(cellX, cellY));
-                cellRegionRenderer.renderCellRegionBoundary(engine, chunk.getCellByIndex(cellX, cellY));
+                if (drawCellTexture) {
+                    cellTextureRenderer.drawCell(engine, chunk.getCellByIndex(cellX, cellY));
+                }
+                if (drawCellBoundary) {
+                    cellDebugRenderer.drawCellBoundary(engine, chunk.getCellByIndex(cellX, cellY));
+                }
+                if (drawCellRegions) {
+                    cellDebugRenderer.drawRegionDebug(engine, chunk.getCellByIndex(cellX, cellY));
+                }
+                if(drawCellDebugText){
+                    cellDebugRenderer.drawCellText(engine, chunk.getCellByIndex(cellX, cellY));
+                }
             }
         }
 
-        if (drawAllChunks) {
+        if (drawChunkBoundary) {
             drawer.rectangle(chunk.boundary, Color.BLACK, lineSize * 2);
         }
     }

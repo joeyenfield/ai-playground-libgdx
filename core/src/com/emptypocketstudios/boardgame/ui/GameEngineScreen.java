@@ -21,7 +21,6 @@ import com.emptypocketstudios.boardgame.ui.render.EngineRender;
 public class GameEngineScreen extends StageScreen {
 
     Engine engine;
-    EngineRender render;
 
     Viewport viewport;
     OrthographicCamera camera;
@@ -39,11 +38,8 @@ public class GameEngineScreen extends StageScreen {
         //Setup Engine
         engine = new Engine();
         engine.setup();
+        engine.render = new EngineRender(new TextureAtlas(Gdx.files.internal("art/game.atlas")));
         engine.engineControllerManager = new EngineControllerManager(engine, camera);
-        ;
-        //Setup Renders
-        render = new EngineRender(new TextureAtlas(Gdx.files.internal("art/game.atlas")));
-
     }
 
     @Override
@@ -75,7 +71,7 @@ public class GameEngineScreen extends StageScreen {
     public void drawScreen(float delta) {
         camera.update();
         ScreenUtils.clear(0, 1, 1, 1);
-        render.render(viewport, engine);
+        engine.render.render(viewport, engine);
     }
 
     @Override

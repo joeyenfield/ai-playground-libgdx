@@ -9,7 +9,7 @@ public class PathFindingRequest extends Message implements Pool.Poolable, Compar
     public int attempts = 2;
     public Vector2 pathFindingGoal = new Vector2();
 
-    public boolean debug;
+    private boolean debug = false;
     public boolean diagonal = false;
     public boolean distCheckFast = false;
 
@@ -22,9 +22,14 @@ public class PathFindingRequest extends Message implements Pool.Poolable, Compar
         target = PathFinderManager.MESSAGE_TARGET_NAME;
     }
 
+    public boolean isDebug() {
+        return debug;
+    }
+
     @Override
     public void reset() {
         attempts = 3;
+        debug = false;
         diagonal = false;
         distCheckFast = false;
         requestTime = 0;
@@ -41,5 +46,9 @@ public class PathFindingRequest extends Message implements Pool.Poolable, Compar
             order = Integer.compare(requestTime, o.requestTime);
         }
         return order;
+    }
+
+    public void setDebug(boolean debug) {
+        this.debug = debug;
     }
 }

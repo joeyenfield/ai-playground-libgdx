@@ -3,18 +3,18 @@ package com.emptypocketstudios.boardgame.engine;
 import com.emptypocketstudios.boardgame.engine.world.map.MapGeneratorType;
 
 public class EngineSetupConfig {
-    public int cellsPerChunkX = 16;
-    public int cellsPerChunkY = 16;
-    public int chunksX = 64;
-    public int chunksY = 64;
+    public int cellsPerChunkX = 32;
+    public int cellsPerChunkY = 32;
+    public int chunksX = 10;
+    public int chunksY = 10;
     public int cellSize = 40; //pixels per cell
-    public int entities = 500;
-    public int towns = 64;
-    public int buildings = 10;
+    public int entities = 1000;
+    public int towns = 10;
+    public int buildings = 20;
     public long randomSeed = 126;
     public MapGeneratorType map = MapGeneratorType.BASIC;
     public boolean enableFullBTreeLogging = false;
-
+    public boolean debug =false;
 
 
 //    public int cellsPerChunkX = 10;

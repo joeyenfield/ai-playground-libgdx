@@ -5,13 +5,11 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ArrayMap;
 import com.emptypocketstudios.boardgame.engine.Engine;
 import com.emptypocketstudios.boardgame.engine.entity.Entity;
 import com.emptypocketstudios.boardgame.engine.world.processors.WorldCellSearch;
 import com.emptypocketstudios.boardgame.engine.world.processors.WorldEntitySearch;
 import com.emptypocketstudios.boardgame.engine.world.processors.WorldLoadingProcessor;
-import com.emptypocketstudios.boardgame.engine.world.processors.WorldRegionLinkProcessor;
 import com.emptypocketstudios.boardgame.library.StringUtils;
 
 import java.util.HashMap;
@@ -30,15 +28,14 @@ public class World {
     public Rectangle boundary = new Rectangle();
     public WorldChunk[][] chunks;
 
-    public ArrayMap<RegionNode, Array<RegionNode>> regionLinks = new ArrayMap<>();
-    public ArrayMap<RegionNode, Array<RegionNode>> diagonalRegionLinks = new ArrayMap<>();
+    public HashMap<RegionNode, Array<RegionNode>> regionLinks = new HashMap<>();
+    public HashMap<RegionNode, Array<RegionNode>> diagonalRegionLinks = new HashMap<>();
 
     public Map<String, Entity> namedEntities = new HashMap<>();
 
     public WorldCellSearch cellSearcher;
     public WorldEntitySearch entitySearcher;
 
-    public WorldRegionLinkProcessor worldRegionLinkProcessor;
     public WorldLoadingProcessor worldLoadingProcessor;
 
     public World(Rectangle boundary, int chunksX, int chunksY, int cellsPerChunkX, int cellsPerChunkY) {
@@ -53,9 +50,19 @@ public class World {
         this.cellSearcher = new WorldCellSearch(this);
         this.entitySearcher = new WorldEntitySearch(this);
         this.worldLoadingProcessor = new WorldLoadingProcessor(this);
-        this.worldRegionLinkProcessor = new WorldRegionLinkProcessor(this);
     }
 
+    public void printRegionLinks(){
+        System.out.println("Region Links : ");
+        for (Map.Entry<RegionNode, Array<RegionNode>> entry : regionLinks.entrySet()) {
+            System.out.println("     "+entry.getKey() + " : [" + entry.getValue().toString(",") + "]");
+        }
+
+        System.out.println("Diagonal Region Links : ");
+        for (Map.Entry<RegionNode, Array<RegionNode>> entry : diagonalRegionLinks.entrySet()) {
+            System.out.println("     "+entry.getKey() + " : [" + entry.getValue().toString(",") + "]");
+        }
+    }
     public void addEntity(Entity e) {
         e.world = this;
         namedEntities.put(e.name, e);
@@ -151,11 +158,11 @@ public class World {
                     WorldChunk chunk = chunks[x][y];
                     if (chunk != null) {
                         chunk.updateRegions();
+
                         //Update Linked Nodes that regions need update
                     }
                 }
             }
-            this.worldRegionLinkProcessor.run();
         }
 
     }
@@ -219,7 +226,7 @@ public class World {
                 if (x != 0) {
                     out.append(",");
                 }
-                out.append(getCellByCellId(x, y).region.regionId);
+                out.append("["+x+","+y+"] "+getCellByCellId(x, y).region.regionId);
             }
             out.append("\n");
         }

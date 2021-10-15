@@ -23,6 +23,9 @@ import space.earlygrey.shapedrawer.ShapeDrawer;
 public class EngineRender {
     public boolean draw2DAxis = true;
 
+    public WorldRenderer worldRenderer;
+    public PathFindingRenderer pathRenderer;
+
     TextureAtlas atlas;
     Texture texture;
     TextureRegion region;
@@ -32,10 +35,6 @@ public class EngineRender {
     CameraHelper helper;
     float lineSize;
     Rectangle viewportBounds = new Rectangle();
-
-    WorldRenderer worldRenderer;
-    CellTextureRenderer cellRenderer;
-    PathFindingRenderer pathRenderer;
 
     public EngineRender(TextureAtlas atlas) {
         EntityTextureAtlas.setupAtlas(atlas);
@@ -53,7 +52,6 @@ public class EngineRender {
         helper = new CameraHelper();
         this.atlas = atlas;
         worldRenderer = new WorldRenderer(atlas, drawer);
-        cellRenderer = new CellTextureRenderer(atlas, drawer);
         pathRenderer = new PathFindingRenderer(atlas, drawer);
     }
 
@@ -61,7 +59,6 @@ public class EngineRender {
         helper.getBounds(viewport, viewportBounds);
         lineSize = helper.getScreenToCameraPixelX(viewport.getCamera(), 1);
         worldRenderer.update(viewportBounds, lineSize);
-        cellRenderer.update(viewportBounds, lineSize);
         pathRenderer.update(viewportBounds, lineSize);
         batch.setProjectionMatrix(viewport.getCamera().combined);
     }

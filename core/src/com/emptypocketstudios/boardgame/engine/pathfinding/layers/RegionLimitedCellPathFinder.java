@@ -10,9 +10,7 @@ import com.emptypocketstudios.boardgame.engine.pathfinding.PathFindingResultEnum
 import com.emptypocketstudios.boardgame.engine.pathfinding.cells.CellLink;
 import com.emptypocketstudios.boardgame.engine.world.Cell;
 import com.emptypocketstudios.boardgame.engine.world.RegionNode;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.emptypocketstudios.boardgame.library.StringUtils;
 
 public class RegionLimitedCellPathFinder implements PathSearch {
     // This tracks all paths so we can free to the pool again

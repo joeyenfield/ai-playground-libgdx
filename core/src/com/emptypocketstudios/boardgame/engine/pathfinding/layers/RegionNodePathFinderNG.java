@@ -3,6 +3,7 @@ package com.emptypocketstudios.boardgame.engine.pathfinding.layers;
 import com.badlogic.gdx.ai.msg.PriorityQueue;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ArrayMap;
+import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.Pools;
 import com.emptypocketstudios.boardgame.engine.pathfinding.PathFindingResultEnum;
 import com.emptypocketstudios.boardgame.engine.world.Cell;
@@ -16,9 +17,8 @@ public class RegionNodePathFinderNG implements PathSearch {
     Array<RegionLinksNG> createdPaths = new Array<>();
 
     PriorityQueue<RegionLinksNG> openPaths = new PriorityQueue<>();
-    ArrayMap<RegionNode, RegionLinksNG> bestIncomingLink = new ArrayMap<>();
-
-    ArrayMap<RegionNode, Array<RegionNode>> worldRegionLinks;
+    HashMap<RegionNode, RegionLinksNG> bestIncomingLink = new HashMap<>();
+    HashMap<RegionNode, Array<RegionNode>> worldRegionLinks;
     long startTime = 0;
     long timeLimit = 0;
 

@@ -16,8 +16,7 @@ import com.emptypocketstudios.boardgame.engine.world.Cell;
 public class PathFollowComponent extends EntityComponent implements Pool.Poolable, PathFindingResponseHandler {
     public Array<Cell> path = new Array<>(1024);
     public int currentIndex = 0;
-    public PathFinder debugPathFinder = null;
-
+    private PathFinder debugPathFinder = null;
     float moveThreshold = 0.05f; //What % of a call before close enough
     float endThreshold = 0.005f; // What % of cell for final
 
@@ -60,6 +59,7 @@ public class PathFollowComponent extends EntityComponent implements Pool.Poolabl
     public void reset() {
         this.currentIndex = 0;
         this.path.clear();
+        debugPathFinder = null;
         pathFollowFailed = false;
         reachedTarget = false;
         pathInProgress = false;
@@ -74,12 +74,13 @@ public class PathFollowComponent extends EntityComponent implements Pool.Poolabl
             return;
         }
         PathFindingRequest request = Pools.obtain(PathFindingRequest.class);
+
         request.diagonal = diagonals;
         request.distCheckFast = distCheckFast;
         request.source = entity.name;
         request.attempts = 2;
         request.pathFindingGoal.set(c.pos);
-        request.debug = debug;
+        request.setDebug(debug);
         request.directResponse = this;
         entity.world.engine.postOffice.send(request);
     }
@@ -159,6 +160,14 @@ public class PathFollowComponent extends EntityComponent implements Pool.Poolabl
         this.pathFollowFailed = false;
         this.reachedTarget = true;
         this.pathInProgress = false;
+    }
+
+    public PathFinder getDebugPathFinder() {
+        return debugPathFinder;
+    }
+
+    public void setDebugPathFinder(PathFinder debugPathFinder) {
+        this.debugPathFinder = debugPathFinder;
     }
 
 

@@ -19,8 +19,6 @@ import com.emptypocketstudios.boardgame.engine.world.WorldChunk;
 import com.emptypocketstudios.boardgame.ui.EngineControllerManager;
 
 public class MapDesignOverlay extends EngineController {
-    int minTouchSizeCm = 50;
-
     boolean enabled = false;
     CellType currentCellType = CellType.GRASS;
 

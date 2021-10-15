@@ -12,10 +12,10 @@ import com.emptypocketstudios.boardgame.engine.world.Cell;
 import com.emptypocketstudios.boardgame.engine.world.RegionNode;
 
 public class PathFinder {
-    public boolean debug=false;
+    public boolean debug = false;
     Engine engine;
-    public RegionLimitedCellPathFinder graphFinder = new RegionLimitedCellPathFinder();
-    public RegionNodePathFinderNG layerFinder = new RegionNodePathFinderNG();
+    public final RegionLimitedCellPathFinder graphFinder = new RegionLimitedCellPathFinder();
+    public final RegionNodePathFinderNG layerFinder = new RegionNodePathFinderNG();
 
     public Array<RegionNode> regions = new Array<>();
     public Array<Cell> cells = new Array<>();
@@ -53,6 +53,10 @@ public class PathFinder {
     }
 
     public void getPathFindingResponse(long maxTime, long startTime, PathFindingResponse response, Cell start, Cell end, boolean diagonal, boolean distCheckFast) {
+        getPathFindingResponse(maxTime, startTime, response, start, end, diagonal, distCheckFast, false);
+    }
+
+    public void getPathFindingResponse(long maxTime, long startTime, PathFindingResponse response, Cell start, Cell end, boolean diagonal, boolean distCheckFast, boolean expandRegions) {
         if (start != null && end != null) {
             //Perform Region Search
             regions.clear();
@@ -60,6 +64,27 @@ public class PathFinder {
 
             layerFinder.setup(engine.world, start, end, regions, maxTime, diagonal);
             response.regionSearchResult = layerFinder.processAll();
+
+            // Region Expansion
+            if (expandRegions) {
+                int originalSize = regions.size;
+                for (int i = 0; i < originalSize; i++) {
+                    RegionNode region = regions.get(i);
+                    Array<RegionNode> nodes = null;
+                    if (diagonal) {
+                        nodes = engine.world.diagonalRegionLinks.get(region);
+                    } else {
+                        nodes = engine.world.regionLinks.get(region);
+                    }
+                    for (int j = 0; j < nodes.size; j++) {
+                        RegionNode other = nodes.get(j);
+                        if (!regions.contains(other, false)) {
+                            regions.add(other);
+                        }
+                    }
+                }
+            }
+
             //Perform Cell Search
             if (response.regionSearchResult == PathFindingResultEnum.SUCCESS) {
                 graphFinder.distCheckFast = distCheckFast;

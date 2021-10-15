@@ -21,7 +21,7 @@ public class PathFindingResponse extends Message implements Pool.Poolable {
     public void setSource(PathFindingRequest request) {
         this.diagonal = request.diagonal;
         this.distCheckFast = request.distCheckFast;
-        this.debug = request.debug;
+        this.debug = request.isDebug();
         this.priority = request.priority;
     }
 

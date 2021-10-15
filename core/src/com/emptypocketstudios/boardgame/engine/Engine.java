@@ -14,6 +14,7 @@ import com.emptypocketstudios.boardgame.engine.world.World;
 import com.emptypocketstudios.boardgame.engine.world.map.MapFactory;
 import com.emptypocketstudios.boardgame.engine.world.map.MapGenerator;
 import com.emptypocketstudios.boardgame.ui.EngineControllerManager;
+import com.emptypocketstudios.boardgame.ui.render.EngineRender;
 
 public class Engine implements MessageProcessor {
     public static final String ENGINE_NAME = "Engine";
@@ -26,6 +27,7 @@ public class Engine implements MessageProcessor {
     public PathFinderManager pathFinderManager;
     public EntityFactory entityFactory;
     public RegionNodePathFinderNG region = new RegionNodePathFinderNG();
+    public EngineRender render;
 
     public Engine() {
         postOffice.register(ENGINE_NAME, this);

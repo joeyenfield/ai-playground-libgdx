@@ -84,7 +84,6 @@ public class CellPlanPathAction
         request.source = entity.name;
         request.diagonal = this.diagonal;
         request.distCheckFast = this.distCheckFast;
-        request.debug = this.debug;
         request.attempts = 2;
         request.priority = this.priority;
         request.pathFindingGoal.set(pos);
